@@ -5,11 +5,9 @@ using UnityEngine.AI;
 
 public class Mover : MonoBehaviour
 {
-	//Config parameters
-	[SerializeField] GameObject target;
-
 	//Cache
 	NavMeshAgent nma;
+
 	void Start()
 	{
 		nma = GetComponent<NavMeshAgent>();
@@ -17,16 +15,27 @@ public class Mover : MonoBehaviour
 
 	void Update()
 	{
-		MoveToTarget();
+		if(Input.GetMouseButtonDown(0))
+		{
+			MoveToCursor();
+		}
 	}
 
-	private void MoveToTarget()
+	private void MoveToCursor()
 	{
-		if (!nma) { return; }
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		RaycastHit hit;
 
-		else
+		bool hasHit = Physics.Raycast(ray, out hit);
+
+		if(hasHit)
 		{
-			nma.destination = target.transform.position;
+			if (!nma) { return; }
+
+            else
+            {
+                nma.destination = hit.point;
+            }
 		}
 	}
 }
