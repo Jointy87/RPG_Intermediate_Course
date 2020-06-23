@@ -5,7 +5,7 @@ using RPGCourse.Combat;
 namespace RPGCourse.Control
 {
 	public class PlayerController : MonoBehaviour
-	{
+	{	
 		void Update()
 		{
 			if(ControlCombat()) return;
@@ -40,6 +40,7 @@ namespace RPGCourse.Control
 				if (Input.GetMouseButton(0))
 				{
 					GetComponent<Mover>().MoveTo(hit.point);
+					GetComponent<Fighter>().target = null;
 				} 
 				return true;
 			}
