@@ -37,13 +37,13 @@ namespace RPGCourse.Control
 
 			if(hasHit)
 			{
-                if (Input.GetMouseButton(0))
-                {
-                    GetComponent<Mover>().MoveTo(hit.point);
-                } 
-                return true;
-            }
-            return false;
+				if (Input.GetMouseButton(0))
+				{
+					GetComponent<Mover>().MoveTo(hit.point);
+				} 
+				return true;
+			}
+			return false;
 		}
 
 		private static Ray GetMouseRay()
