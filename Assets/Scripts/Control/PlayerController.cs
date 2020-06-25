@@ -25,8 +25,10 @@ namespace RPGCourse.Control
 				{
 					GetComponent<Fighter>().Attack(target);
 				}
+				print("true");
 				return true;
 			}
+			print("false");
 			return false;
 		}
 
