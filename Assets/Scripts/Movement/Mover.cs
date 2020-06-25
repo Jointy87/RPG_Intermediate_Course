@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
-using RPGCourse.Combat;
 using RPGCourse.Core;
 
 namespace RPGCourse.Movement
 {
-	public class Mover : MonoBehaviour
+	public class Mover : MonoBehaviour, IAction
 	{
 		//Cache
 		NavMeshAgent nma;
@@ -23,19 +22,14 @@ namespace RPGCourse.Movement
 		public void StartMoveAction(Vector3 destination)
 		{
 			GetComponent<ActionScheduler>().StartAction(this);
-			GetComponent<Fighter>().CancelAttack();
-			nma.isStopped = false;
+
 			MoveTo(destination);
 		}
 
 		public void MoveTo(Vector3 destination)
 		{
 			nma.destination = destination;
-		}
-
-		public void StopMoving()
-		{
-			nma.isStopped = true;
+			nma.isStopped = false;
 		}
 
 		private void UpdateAnimator()
@@ -44,6 +38,11 @@ namespace RPGCourse.Movement
 			Vector3 localVelocity = transform.InverseTransformDirection(velocity);  //converts global to local velocity
 			float speed = localVelocity.z;
 			GetComponent<Animator>().SetFloat("forwardSpeed", speed);
+		}
+
+		public void Cancel()
+		{
+			nma.isStopped = true;
 		}
 	}
 }
