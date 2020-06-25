@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
+using RPGCourse.Combat;
+using RPGCourse.Core;
 
 namespace RPGCourse.Movement
 {
@@ -18,10 +20,17 @@ namespace RPGCourse.Movement
 			UpdateAnimator();
 		}
 
+		public void StartMoveAction(Vector3 destination)
+		{
+			GetComponent<ActionScheduler>().StartAction(this);
+			GetComponent<Fighter>().CancelAttack();
+			nma.isStopped = false;
+			MoveTo(destination);
+		}
+
 		public void MoveTo(Vector3 destination)
 		{
 			nma.destination = destination;
-            nma.isStopped = false;
 		}
 
 		public void StopMoving()

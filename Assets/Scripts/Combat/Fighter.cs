@@ -1,5 +1,6 @@
 using UnityEngine;
 using RPGCourse.Movement;
+using RPGCourse.Core;
 
 namespace RPGCourse.Combat
 {
@@ -9,7 +10,7 @@ namespace RPGCourse.Combat
 		[SerializeField] float weaponRange = 2f;
 
 		//Cache
-		public Transform target;
+		Transform target;
 		Mover mover;
 
 		private void Start() 
@@ -17,17 +18,22 @@ namespace RPGCourse.Combat
 			mover = GetComponent<Mover>();
 		}
 
-		private void Update() 
+		private void Update()
 		{
-			if(!target) return;
+			GetInRange();
+		}
+
+		private void GetInRange()
+		{
+			if (!target) return;
 
 			bool isInRange = Vector3.Distance(transform.position, target.position) < weaponRange;
 
-			if(target != null && !isInRange)
+			if (target != null && !isInRange)
 			{
 				mover.MoveTo(target.position);
 			}
-			else 
+			else
 			{
 				mover.StopMoving();
 			}
@@ -35,7 +41,13 @@ namespace RPGCourse.Combat
 
 		public void Attack(CombatTarget combatTarget)
 		{
+			GetComponent<ActionScheduler>().StartAction(this);
 			target = combatTarget.transform;
+		}
+
+		public void CancelAttack()
+		{
+			target = null;
 		}
 	}
 }
