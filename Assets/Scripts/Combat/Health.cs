@@ -4,11 +4,20 @@ namespace RPGCourse.Combat
 {
 	public class Health : MonoBehaviour
 	{
-		[SerializeField] float health = 100f;
+		//Config parameters
+		[SerializeField] float healthPoints = 100f;
+
+		//Cache
+		bool isAlive = true;
 
 		public void TakeDamage(float damage)
 		{
-			health = Mathf.Max(health - damage, 0); // takes highest value, in this case either health - damage, or 0
+			healthPoints = Mathf.Max(healthPoints - damage, 0); // takes highest value, in this case either health - damage, or 0
+			if (healthPoints == 0 && isAlive)
+			{
+				isAlive = false;
+				GetComponent<Animator>().SetTrigger("die");
+			}
 		}
 	}
 }
