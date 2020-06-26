@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.AI;
 using RPGCourse.Core;
 
@@ -8,14 +10,17 @@ namespace RPGCourse.Movement
 	{
 		//Cache
 		NavMeshAgent nma;
+		Health health;
 
 		private void Start() 
 		{
 			nma = GetComponent<NavMeshAgent>();
+			health = GetComponent<Health>();
 		}
 
 		void Update()
 		{
+			nma.enabled = health.IsAlive();
 			UpdateAnimator();
 		}
 

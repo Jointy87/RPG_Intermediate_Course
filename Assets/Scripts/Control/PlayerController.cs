@@ -1,15 +1,28 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using RPGCourse.Movement;
 using RPGCourse.Combat;
+using RPGCourse.Core;
 
 namespace RPGCourse.Control
 {
 	public class PlayerController : MonoBehaviour
 	{	
+		//Cache
+		Health health;
+
+		void Start() 
+		{
+			health = GetComponent<Health>();
+		}
+
 		void Update()
 		{
-			if(ControlCombat()) return;
-			else if(ControlMovement()) return;
+			if (!health.IsAlive()) return;
+
+			if (ControlCombat()) return;
+			else if (ControlMovement()) return;
 			print("Nothing to do dawg");
 		}
 
@@ -19,11 +32,13 @@ namespace RPGCourse.Control
 			foreach (RaycastHit hit in hits)
 			{
 				CombatTarget target = hit.transform.GetComponent<CombatTarget>();
-				if(target == null) continue;
+				if(!target) continue;
+
+				if(!GetComponent<Fighter>().CanAttack(target.gameObject)) continue;
 
 				if (Input.GetMouseButtonDown(0))
 				{
-					GetComponent<Fighter>().Attack(target);
+					GetComponent<Fighter>().Attack(target.gameObject);
 				}
 				print("true");
 				return true;

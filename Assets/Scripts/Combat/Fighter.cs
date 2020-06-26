@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using RPGCourse.Movement;
 using RPGCourse.Core;
@@ -14,11 +16,13 @@ namespace RPGCourse.Combat
 		//Cache
 		Health target;
 		Mover mover;
-		float timeSinceLastAttack = 0;
+		Animator animator;
+		float timeSinceLastAttack = Mathf.Infinity;
 
 		private void Start() 
 		{
 			mover = GetComponent<Mover>();
+			animator = GetComponent<Animator>();
 		}
 
 		private void Update()
@@ -29,7 +33,7 @@ namespace RPGCourse.Combat
 
 		private void GetInRange()
 		{
-			if (!target || !target.FetchAliveStatus()) return;
+			if (!target || !target.IsAlive()) return;
 
 			bool isInRange = Vector3.Distance(transform.position, target.transform.position) < weaponRange;
 
@@ -46,21 +50,28 @@ namespace RPGCourse.Combat
 
 		private void AttackBehaviour()
 		{
+			transform.LookAt(target.transform.position);
+
 			if(timeSinceLastAttack >= tempAttackInterval)
 			{
-				GetComponent<Animator>().SetTrigger("attack");
+				TriggerAttackAnimation();
 				timeSinceLastAttack = 0;
 			}
-
 		}
-		
+
+		private void TriggerAttackAnimation()
+		{
+			animator.ResetTrigger("stopAttacking");
+			animator.SetTrigger("attack");
+		}
+
 		void Hit() //Animation Event
 		{
 			if (!target) return;
 			target.TakeDamage(tempWeaponDamage);
 		}
 
-		public void Attack(CombatTarget combatTarget)
+		public void Attack(GameObject combatTarget)
 		{
 			GetComponent<ActionScheduler>().StartAction(this);
 
@@ -69,8 +80,22 @@ namespace RPGCourse.Combat
 
 		public void Cancel()
 		{
-			GetComponent<Animator>().SetTrigger("stopAttacking");
+			TriggerStopAttackInAnimator();
 			target = null;
+		}
+
+		private void TriggerStopAttackInAnimator()
+		{
+			animator.ResetTrigger("attack");
+			animator.SetTrigger("stopAttacking");
+		}
+
+		public bool CanAttack(GameObject combatTarget)
+		{
+			if(!combatTarget) return false;
+
+			Health targetToTest = combatTarget.GetComponent<Health>();
+			return targetToTest != null && targetToTest.IsAlive();
 		}
 	}
 }

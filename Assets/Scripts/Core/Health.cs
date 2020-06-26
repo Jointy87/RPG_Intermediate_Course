@@ -1,6 +1,8 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace RPGCourse.Combat
+namespace RPGCourse.Core
 {
 	public class Health : MonoBehaviour
 	{
@@ -10,7 +12,7 @@ namespace RPGCourse.Combat
 		//Cache
 		bool isAlive = true;
 
-		public bool FetchAliveStatus()
+		public bool IsAlive()
 		{
 			return isAlive;
 		}
@@ -22,6 +24,7 @@ namespace RPGCourse.Combat
 			{
 				isAlive = false;
 				GetComponent<Animator>().SetTrigger("die");
+				GetComponent<ActionScheduler>().CancelCurrentAction();
 			}
 		}
 	}

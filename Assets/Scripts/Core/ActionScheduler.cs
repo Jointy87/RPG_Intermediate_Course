@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace RPGCourse.Core
@@ -6,7 +8,6 @@ namespace RPGCourse.Core
 	{
 		//Cache
 		IAction currentAction;
-		IAction previousAction;
 
 		public void StartAction(IAction action)
 		{
@@ -17,6 +18,11 @@ namespace RPGCourse.Core
 				currentAction.Cancel();
 			}
 			currentAction = action;
+		}
+
+		public void CancelCurrentAction()
+		{
+			StartAction(null);
 		}
 	}
 }
