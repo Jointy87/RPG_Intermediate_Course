@@ -50,7 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 320079eb3faf1f3478557294b74dc489, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
+  healthPoints: 100
 --- !u!114 &3099239734441441287
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -117,7 +117,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!195 &1171431221737889330
 NavMeshAgent:
   m_ObjectHideFlags: 0

@@ -12,7 +12,7 @@ namespace RPGCourse.Combat
 		[SerializeField] float tempWeaponDamage = 10f;
 
 		//Cache
-		Transform target;
+		Health target;
 		Mover mover;
 		float timeSinceLastAttack = 0;
 
@@ -29,13 +29,13 @@ namespace RPGCourse.Combat
 
 		private void GetInRange()
 		{
-			if (!target) return;
+			if (!target || !target.FetchAliveStatus()) return;
 
-			bool isInRange = Vector3.Distance(transform.position, target.position) < weaponRange;
+			bool isInRange = Vector3.Distance(transform.position, target.transform.position) < weaponRange;
 
 			if (!isInRange)
 			{
-				mover.MoveTo(target.position);
+				mover.MoveTo(target.transform.position);
 			}
 			else
 			{
@@ -54,22 +54,22 @@ namespace RPGCourse.Combat
 
 		}
 		
-		//Animation Event
-		void Hit()
+		void Hit() //Animation Event
 		{
 			if (!target) return;
-			target.GetComponent<Health>().TakeDamage(tempWeaponDamage);
+			target.TakeDamage(tempWeaponDamage);
 		}
 
 		public void Attack(CombatTarget combatTarget)
 		{
 			GetComponent<ActionScheduler>().StartAction(this);
 
-			target = combatTarget.transform;
+			target = combatTarget.GetComponent<Health>();
 		}
 
 		public void Cancel()
 		{
+			GetComponent<Animator>().SetTrigger("stopAttacking");
 			target = null;
 		}
 	}

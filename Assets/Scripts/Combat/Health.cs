@@ -10,6 +10,11 @@ namespace RPGCourse.Combat
 		//Cache
 		bool isAlive = true;
 
+		public bool FetchAliveStatus()
+		{
+			return isAlive;
+		}
+
 		public void TakeDamage(float damage)
 		{
 			healthPoints = Mathf.Max(healthPoints - damage, 0); // takes highest value, in this case either health - damage, or 0
