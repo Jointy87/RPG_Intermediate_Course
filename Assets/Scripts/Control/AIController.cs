@@ -27,7 +27,7 @@ namespace RPGCourse.Control
 		//States
 		Vector3 guardPosition;
 		float timeSinceLastSawPlayer = Mathf.Infinity;
-		float timeDwelledAtWaypoint = 0;	
+		float timeDwelledAtWaypoint = Mathf.Infinity;	
 		int waypointIndex = 0;
 
 		void Start() 
@@ -43,10 +43,15 @@ namespace RPGCourse.Control
 		void Update()
 		{
 			if (!health.IsAlive()) return;
-			
-			ChaseAndAttackPlayer();
 
+			UpdateTimers();
+			ChaseAndAttackPlayer();
+		}
+
+		private void UpdateTimers()
+		{
 			timeSinceLastSawPlayer += Time.deltaTime;
+			timeDwelledAtWaypoint += Time.deltaTime;
 		}
 
 		private void ChaseAndAttackPlayer()
@@ -83,18 +88,17 @@ namespace RPGCourse.Control
 			{
 				if(AtWaypoint())
 				{
-					timeDwelledAtWaypoint += Time.deltaTime;
-					if (timeDwelledAtWaypoint >= waypointDwellTime)
-					{
-						CycleWaypoint();
-						timeDwelledAtWaypoint = 0;
-					}
+					timeDwelledAtWaypoint = 0;
+					CycleWaypoint();
 				}
 
 				nextPosition = GetCurrentWaypoint();
 			}
 			
-			mover.StartMoveAction(nextPosition);
+			if (timeDwelledAtWaypoint >= waypointDwellTime)
+			{
+				mover.StartMoveAction(nextPosition);
+			}
 		}
 
 		private bool AtWaypoint()
