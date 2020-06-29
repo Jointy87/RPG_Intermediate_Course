@@ -23,7 +23,6 @@ namespace RPGCourse.Control
 
 			if (ControlCombat()) return;
 			else if (ControlMovement()) return;
-			print("Nothing to do dawg");
 		}
 
 		private bool ControlCombat()
@@ -40,10 +39,8 @@ namespace RPGCourse.Control
 				{
 					GetComponent<Fighter>().Attack(target.gameObject);
 				}
-				print("true");
 				return true;
 			}
-			print("false");
 			return false;
 		}
 
