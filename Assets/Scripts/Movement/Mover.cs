@@ -8,6 +8,9 @@ namespace RPGCourse.Movement
 {
 	public class Mover : MonoBehaviour, IAction
 	{
+		//Config paramters
+		[SerializeField] float maxSpeed = 6f;
+		
 		//Cache
 		NavMeshAgent nma;
 		Health health;
@@ -24,17 +27,18 @@ namespace RPGCourse.Movement
 			UpdateAnimator();
 		}
 
-		public void StartMoveAction(Vector3 destination)
+		public void StartMoveAction(Vector3 destination, float speedFraction)
 		{
 			GetComponent<ActionScheduler>().StartAction(this);
 
-			MoveTo(destination);
+			MoveTo(destination, speedFraction);
 		}
 
-		public void MoveTo(Vector3 destination)
+		public void MoveTo(Vector3 destination, float speedFraction)
 		{
 			nma.destination = destination;
 			nma.isStopped = false;
+			nma.speed = maxSpeed * speedFraction *Mathf.Clamp01(speedFraction);
 		}
 
 		private void UpdateAnimator()

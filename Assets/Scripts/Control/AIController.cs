@@ -12,11 +12,18 @@ namespace RPGCourse.Control
 	public class AIController : MonoBehaviour
 	{
 		//Config parameters
+		[Tooltip("Size of radius within which player will be followed")]
 		[SerializeField] float chaseDistance = 5f;
+		[Tooltip("Time in s spent on player's last seen location")]
 		[SerializeField] float suspicionTime = 10f;
+		[Tooltip("Patrolpath gameObject, if used")]
 		[SerializeField] PatrolPath patrolPath;
+		[Tooltip("Range tolerance for detecting a waypoint")]
 		[SerializeField] float waypointTolerance = .5f;
+		[Tooltip("Time in s spent at a waypoint before moving on")]
 		[SerializeField] float waypointDwellTime = 1f;
+		[Range(0,1)][Tooltip("Max speed divided by this amount while patrolling")]
+		[SerializeField] float patrolSpeedFraction = .3f;
 
 		//Cache
 		GameObject player;
@@ -97,7 +104,7 @@ namespace RPGCourse.Control
 			
 			if (timeDwelledAtWaypoint >= waypointDwellTime)
 			{
-				mover.StartMoveAction(nextPosition);
+				mover.StartMoveAction(nextPosition, patrolSpeedFraction);
 			}
 		}
 
