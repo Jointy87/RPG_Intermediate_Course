@@ -1,15 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.AI;
+﻿using UnityEngine;
 using RPGCourse.Combat;
 using RPGCourse.Core;
 using RPGCourse.Movement;
-using System;
+using RPGCourse.Saving;
 
 namespace RPGCourse.Control
 {
-	public class AIController : MonoBehaviour
+	public class AIController : MonoBehaviour, ISaveable
 	{
 		//Config parameters
 		[Tooltip("Size of radius within which player will be followed")]
@@ -36,6 +33,7 @@ namespace RPGCourse.Control
 		float timeSinceLastSawPlayer = Mathf.Infinity;
 		float timeDwelledAtWaypoint = Mathf.Infinity;	
 		int waypointIndex = 0;
+		Vector3 nextPosition;
 
 		void Start() 
 		{
@@ -53,6 +51,14 @@ namespace RPGCourse.Control
 
 			UpdateTimers();
 			ChaseAndAttackPlayer();
+		}
+
+		[System.Serializable]
+		struct SavingStruct
+		{
+			public float savedWaypointDwellTime;
+			public float savedTimeSinceLastSawPlayer;
+			public SerializableVector3 savedNextPosition;
 		}
 
 		private void UpdateTimers()
@@ -89,7 +95,7 @@ namespace RPGCourse.Control
 		
 		private void PatrolBehaviour()
 		{
-			Vector3 nextPosition = guardPosition;
+			nextPosition = guardPosition;
 
 			if(patrolPath != null)
 			{
@@ -135,6 +141,34 @@ namespace RPGCourse.Control
 		{
 			Gizmos.color = Color.red;
 			Gizmos.DrawWireSphere(transform.position, chaseDistance);
+		}
+
+		public object CaptureState()
+		{
+			SavingStruct savingStruct = new SavingStruct();
+
+			savingStruct.savedWaypointDwellTime = waypointDwellTime;
+			savingStruct.savedTimeSinceLastSawPlayer = timeSinceLastSawPlayer;
+			savingStruct.savedNextPosition = new SerializableVector3(nextPosition);
+			return savingStruct;
+		}
+
+		public void RestoreState(object state)
+		{
+			SavingStruct savingStruct = (SavingStruct)state;
+			
+			waypointDwellTime = savingStruct.savedWaypointDwellTime;
+			nextPosition = savingStruct.savedNextPosition.ToVector();
+			print("doing this");
+
+			if(timeSinceLastSawPlayer <= Mathf.Epsilon)
+			{
+				timeSinceLastSawPlayer = Mathf.Infinity;
+			}
+			else
+			{
+				timeSinceLastSawPlayer = savingStruct.savedTimeSinceLastSawPlayer;
+			}
 		}
 	}
 }

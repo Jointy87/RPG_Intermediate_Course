@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using RPGCourse.Core;
+using RPGCourse.Saving;
 
 namespace RPGCourse.Movement
 {
-	public class Mover : MonoBehaviour, IAction
+	public class Mover : MonoBehaviour, IAction, ISaveable
 	{
 		//Config paramters
 		[SerializeField] float maxSpeed = 6f;
@@ -52,6 +53,19 @@ namespace RPGCourse.Movement
 		public void Cancel()
 		{
 			nma.isStopped = true;
+		}
+
+		public object CaptureState() //object is parent class of all objects, means you can return anything
+		{
+			return new SerializableVector3(transform.position);
+		}
+
+		public void RestoreState(object state)
+		{
+			NavMeshAgent nma = GetComponent<NavMeshAgent>(); //need this because this method is called between awake and start
+			SerializableVector3 position = (SerializableVector3)state; //we're casting here
+			nma.enabled = true;
+			nma.Warp(position.ToVector());
 		}
 	}
 }
