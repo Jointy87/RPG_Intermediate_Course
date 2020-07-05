@@ -6,7 +6,7 @@ using RPGCourse.Core;
 
 namespace RPGCourse.Combat
 {
-	public class Fighter : MonoBehaviour, IAction 
+	public class Fighter : MonoBehaviour, IAction
 	{
 		//Config parameters
 		[SerializeField] float weaponRange = 2f;

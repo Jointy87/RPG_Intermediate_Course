@@ -53,14 +53,6 @@ namespace RPGCourse.Control
 			ChaseAndAttackPlayer();
 		}
 
-		[System.Serializable]
-		struct SavingStruct
-		{
-			public float savedWaypointDwellTime;
-			public float savedTimeSinceLastSawPlayer;
-			public SerializableVector3 savedNextPosition;
-		}
-
 		private void UpdateTimers()
 		{
 			timeSinceLastSawPlayer += Time.deltaTime;
@@ -143,9 +135,17 @@ namespace RPGCourse.Control
 			Gizmos.DrawWireSphere(transform.position, chaseDistance);
 		}
 
+		[System.Serializable]
+		struct AICSaveStruct
+		{
+			public float savedWaypointDwellTime;
+			public float savedTimeSinceLastSawPlayer;
+			public SerializableVector3 savedNextPosition;
+		}
+
 		public object CaptureState()
 		{
-			SavingStruct savingStruct = new SavingStruct();
+			AICSaveStruct savingStruct = new AICSaveStruct();
 
 			savingStruct.savedWaypointDwellTime = waypointDwellTime;
 			savingStruct.savedTimeSinceLastSawPlayer = timeSinceLastSawPlayer;
@@ -155,11 +155,10 @@ namespace RPGCourse.Control
 
 		public void RestoreState(object state)
 		{
-			SavingStruct savingStruct = (SavingStruct)state;
+			AICSaveStruct savingStruct = (AICSaveStruct)state;
 			
 			waypointDwellTime = savingStruct.savedWaypointDwellTime;
 			nextPosition = savingStruct.savedNextPosition.ToVector();
-			print("doing this");
 
 			if(timeSinceLastSawPlayer <= Mathf.Epsilon)
 			{
