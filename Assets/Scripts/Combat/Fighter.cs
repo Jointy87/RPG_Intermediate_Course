@@ -83,7 +83,19 @@ namespace RPGCourse.Combat
 		void Hit() //Animation Event
 		{
 			if (!target) return;
+
+			if(currentWeapon.HasProjectile())
+			{
+				currentWeapon.LaunchProjectile(rightHandTransform, leftHandTransform, target);
+				return;
+			}
+			
 			target.TakeDamage(currentWeapon.FetchDamage());
+		}
+
+		void Shoot() //Animation Event
+		{
+			Hit();
 		}
 
 		public void Attack(GameObject combatTarget)

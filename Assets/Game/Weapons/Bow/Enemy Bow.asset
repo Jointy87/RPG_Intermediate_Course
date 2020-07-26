@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8f0884d273aa4e94d81cd8ddf8ea8229, type: 3}
-  m_Name: Bow
+  m_Name: Enemy Bow
   m_EditorClassIdentifier: 
   weaponRange: 15
   attackInterval: 2
@@ -19,5 +19,5 @@ MonoBehaviour:
     type: 3}
   animatorOverride: {fileID: 22100000, guid: b1ef55590919e0941ae94192a48f5372, type: 2}
   isLeftHanded: 1
-  projectile: {fileID: 5557811506327315607, guid: ea4231dd1227dbc4f8a311cc501249d7,
+  projectile: {fileID: 5439399150719180987, guid: df0eaa8241fb0dd42a151966c9919b43,
     type: 3}

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using RPGCourse.Core;
+using UnityEngine;
 
 namespace RPGCourse.Combat
 {
@@ -12,23 +13,42 @@ namespace RPGCourse.Combat
 		[SerializeField] GameObject equippedPrefab = null;
 		[SerializeField] AnimatorOverrideController animatorOverride = null;
 		[SerializeField] bool isLeftHanded = false;
+		[SerializeField] Projectile projectile = null;
 
 		public void Spawn(Transform rightHand, Transform leftHand, Animator animator)
 		{
 			if(equippedPrefab != null)
 			{
-				Transform handTransform;
-
-				if(isLeftHanded) handTransform = leftHand;
-				else handTransform = rightHand;
+				Transform handTransform = GetHand(rightHand, leftHand);
 
 				Instantiate(equippedPrefab, handTransform);
 			}
 
-			if(animatorOverride != null)
+			if (animatorOverride != null)
 			{
 				animator.runtimeAnimatorController = animatorOverride;
 			}	
+		}
+
+		private Transform GetHand(Transform rightHand, Transform leftHand)
+		{
+			Transform handTransform;
+
+			if (isLeftHanded) handTransform = leftHand;
+			else handTransform = rightHand;
+			return handTransform;
+		}
+
+		public void LaunchProjectile(Transform rightHand, Transform leftHand, Health target)
+		{
+			Projectile projectileInstance = 
+			Instantiate(projectile, GetHand(rightHand, leftHand).position, Quaternion.identity);
+			projectileInstance.SetTarget(target, weaponDamage);
+		}
+
+		public bool HasProjectile()
+		{
+			return projectile != null;
 		}
 
 		public float FetchRange()

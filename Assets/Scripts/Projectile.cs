@@ -1,12 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using RPGCourse.Core;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-	//Config parameters
-	[SerializeField] Transform target = null;
+	//Config parameters	
 	[SerializeField] float speed = 1;
+
+	//Cache
+	Health target = null;
+
+	//States
+	float damage = 0;
 
 	private void Update()
 	{
@@ -20,9 +26,22 @@ public class Projectile : MonoBehaviour
 	{
 		CapsuleCollider targetCollider = target.GetComponent<CapsuleCollider>();
 
-		if(targetCollider == null) return target.position;
-		
-		return target.position + Vector3.up * targetCollider.height / 2;
+		if(targetCollider == null) return target.transform.position;
+
+		return target.transform.position + Vector3.up * targetCollider.height / 2;
+	}
+
+	public void SetTarget(Health incomingTarget, float weaponDamage)
+	{
+		target = incomingTarget;
+		damage = weaponDamage;
+	}
+
+	private void OnTriggerEnter(Collider other) 
+	{
+		if(other.GetComponent<Health>() != target) return;
+		target.TakeDamage(damage);
+		Destroy(gameObject);
 	}
 }
 
