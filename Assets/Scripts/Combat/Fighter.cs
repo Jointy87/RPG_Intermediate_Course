@@ -9,7 +9,8 @@ namespace RPGCourse.Combat
 	public class Fighter : MonoBehaviour, IAction
 	{
 		//Config parameters
-		[SerializeField] Transform handTransform = null;
+		[SerializeField] Transform rightHandTransform = null;
+		[SerializeField] Transform leftHandTransform = null;
 		[SerializeField] Weapon defaultWeapon = null;
 
 		//Cache
@@ -32,16 +33,16 @@ namespace RPGCourse.Combat
 			EquipWeapon(defaultWeapon);
 		}
 
-		public void EquipWeapon(Weapon weaponType)
-		{
-			currentWeapon = weaponType;
-			currentWeapon.Spawn(handTransform, animator);
-		}
-
 		private void Update()
 		{
 			timeSinceLastAttack += Time.deltaTime;
 			GetInRange();
+		}
+
+		public void EquipWeapon(Weapon weaponType)
+		{
+			currentWeapon = weaponType;
+			currentWeapon.Spawn(rightHandTransform, leftHandTransform, animator);
 		}
 
 		private void GetInRange()
