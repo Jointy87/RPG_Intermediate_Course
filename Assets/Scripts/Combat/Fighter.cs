@@ -9,20 +9,33 @@ namespace RPGCourse.Combat
 	public class Fighter : MonoBehaviour, IAction
 	{
 		//Config parameters
-		[SerializeField] float weaponRange = 2f;
-		[SerializeField] float tempAttackInterval = .5f;
-		[SerializeField] float tempWeaponDamage = 10f;
+		[SerializeField] Transform handTransform = null;
+		[SerializeField] Weapon defaultWeapon = null;
 
 		//Cache
 		Health target;
 		Mover mover;
 		Animator animator;
-		float timeSinceLastAttack = Mathf.Infinity;
 
-		private void Start() 
+		//States
+		float timeSinceLastAttack = Mathf.Infinity;
+		Weapon currentWeapon = null;
+
+		private void Awake() 
 		{
 			mover = GetComponent<Mover>();
 			animator = GetComponent<Animator>();
+		}
+
+		private void Start()
+		{
+			EquipWeapon(defaultWeapon);
+		}
+
+		public void EquipWeapon(Weapon weaponType)
+		{
+			currentWeapon = weaponType;
+			currentWeapon.Spawn(handTransform, animator);
 		}
 
 		private void Update()
@@ -35,7 +48,8 @@ namespace RPGCourse.Combat
 		{
 			if (!target || !target.IsAlive()) return;
 
-			bool isInRange = Vector3.Distance(transform.position, target.transform.position) < weaponRange;
+			bool isInRange = Vector3.Distance
+				(transform.position, target.transform.position) < currentWeapon.FetchRange();
 
 			if (!isInRange)
 			{
@@ -52,7 +66,7 @@ namespace RPGCourse.Combat
 		{
 			transform.LookAt(target.transform.position);
 
-			if(timeSinceLastAttack >= tempAttackInterval)
+			if(timeSinceLastAttack >= currentWeapon.FetchInterval())
 			{
 				TriggerAttackAnimation();
 				timeSinceLastAttack = 0;
@@ -68,7 +82,7 @@ namespace RPGCourse.Combat
 		void Hit() //Animation Event
 		{
 			if (!target) return;
-			target.TakeDamage(tempWeaponDamage);
+			target.TakeDamage(currentWeapon.FetchDamage());
 		}
 
 		public void Attack(GameObject combatTarget)

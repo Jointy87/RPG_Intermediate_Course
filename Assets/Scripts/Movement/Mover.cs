@@ -15,11 +15,13 @@ namespace RPGCourse.Movement
 		//Cache
 		NavMeshAgent nma;
 		Health health;
+		Animator animator;
 
-		private void Start() 
+		private void Awake() 
 		{
 			nma = GetComponent<NavMeshAgent>();
 			health = GetComponent<Health>();
+			animator = GetComponent<Animator>();
 		}
 
 		void Update()
@@ -47,7 +49,7 @@ namespace RPGCourse.Movement
 			Vector3 velocity = nma.velocity;
 			Vector3 localVelocity = transform.InverseTransformDirection(velocity);  //converts global to local velocity
 			float speed = localVelocity.z;
-			GetComponent<Animator>().SetFloat("forwardSpeed", speed);
+			animator.SetFloat("forwardSpeed", speed);
 		}
 
 		public void Cancel()

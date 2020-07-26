@@ -19,6 +19,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7731847195369789034}
     m_Modifications:
+    - target: {fileID: 162502, guid: 679ff741e12a7e740819ede24a7000b7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 191330, guid: 679ff741e12a7e740819ede24a7000b7, type: 3}
       propertyPath: m_Name
       value: Character_Knights_Soldier_02
@@ -73,6 +77,12 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 3f6fc0cf5e5d31c458bc74ede87cb8ae, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 679ff741e12a7e740819ede24a7000b7, type: 3}
+--- !u!4 &2236817963580909753 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 461188, guid: 679ff741e12a7e740819ede24a7000b7,
+    type: 3}
+  m_PrefabInstance: {fileID: 2236817963580973373}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6648472370377527738
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -95,6 +105,23 @@ PrefabInstance:
       propertyPath: tempAttackInterval
       value: 0.75
       objectReference: {fileID: 0}
+    - target: {fileID: 2365088494699441930, guid: cda4ef695f71b2d48b09521641e552b1,
+        type: 3}
+      propertyPath: handTransform
+      value: 
+      objectReference: {fileID: 2236817963580909753}
+    - target: {fileID: 2365088494699441930, guid: cda4ef695f71b2d48b09521641e552b1,
+        type: 3}
+      propertyPath: weaponPrefab
+      value: 
+      objectReference: {fileID: 1280653343514331623, guid: 79820d126a451fa4297b3aec69be5c3f,
+        type: 3}
+    - target: {fileID: 2365088494699441930, guid: cda4ef695f71b2d48b09521641e552b1,
+        type: 3}
+      propertyPath: defaultWeapon
+      value: 
+      objectReference: {fileID: 11400000, guid: de81ea0719541bb4688b333b59b277de,
+        type: 2}
     - target: {fileID: 3965723394234107856, guid: cda4ef695f71b2d48b09521641e552b1,
         type: 3}
       propertyPath: m_LocalPosition.x

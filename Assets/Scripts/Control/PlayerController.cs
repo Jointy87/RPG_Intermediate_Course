@@ -13,7 +13,7 @@ namespace RPGCourse.Control
 		Health health;
 		Fighter fighter;
 
-		void Start() 
+		void Awake() 
 		{
 			health = GetComponent<Health>();
 			fighter = GetComponent<Fighter>();

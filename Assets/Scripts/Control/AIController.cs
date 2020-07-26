@@ -14,7 +14,7 @@ namespace RPGCourse.Control
 		[Tooltip("Time in s spent on player's last seen location")]
 		[SerializeField] float suspicionTime = 10f;
 		[Tooltip("Patrolpath gameObject, if used")]
-		[SerializeField] PatrolPath patrolPath;
+		[SerializeField] PatrolPath patrolPath = null;
 		[Tooltip("Range tolerance for detecting a waypoint")]
 		[SerializeField] float waypointTolerance = .5f;
 		[Tooltip("Time in s spent at a waypoint before moving on")]
@@ -35,13 +35,16 @@ namespace RPGCourse.Control
 		int waypointIndex = 0;
 		Vector3 nextPosition;
 
-		void Start() 
+		void Awake() 
 		{
 			fighter = GetComponent<Fighter>();
 			player = GameObject.FindWithTag("Player");
 			health = GetComponent<Health>();
 			mover = GetComponent<Mover>();
+		}
 
+		private void Start() 
+		{
 			guardPosition = transform.position;
 		}
 

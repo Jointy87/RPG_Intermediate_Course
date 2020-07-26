@@ -7,10 +7,7 @@ namespace RPGCourse.SceneManagement
 {
 	public class Portal : MonoBehaviour
 	{
-		enum DestinationIdentifier
-		{
-			A, B
-		}
+		enum DestinationIdentifier { A, B }
 		
 		//Config paramters
 		[SerializeField] int sceneIndex = -1;
