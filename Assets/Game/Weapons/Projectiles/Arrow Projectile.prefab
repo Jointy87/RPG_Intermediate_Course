@@ -183,6 +183,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 40
+  isHoming: 0
+  hitVFX: {fileID: 3403685273209769002, guid: 21498e4421d992648bbe54206ffdcef1, type: 3}
 --- !u!136 &1736232170847126446
 CapsuleCollider:
   m_ObjectHideFlags: 0

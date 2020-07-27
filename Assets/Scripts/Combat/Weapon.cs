@@ -15,19 +15,24 @@ namespace RPGCourse.Combat
 		[SerializeField] bool isLeftHanded = false;
 		[SerializeField] Projectile projectile = null;
 
+		//States
+		GameObject spawnedWeapon = null;
+
+		const string weaponName = "EquippedWeapon";
+
 		public void Spawn(Transform rightHand, Transform leftHand, Animator animator)
 		{
+			DestroyEquippedWeapon(rightHand, leftHand);
+
 			if(equippedPrefab != null)
 			{
 				Transform handTransform = GetHand(rightHand, leftHand);
 
-				Instantiate(equippedPrefab, handTransform);
+				GameObject spawnedWeapon = Instantiate(equippedPrefab, handTransform);
+				spawnedWeapon.name = weaponName;
 			}
 
-			if (animatorOverride != null)
-			{
-				animator.runtimeAnimatorController = animatorOverride;
-			}	
+			if (animatorOverride != null) animator.runtimeAnimatorController = animatorOverride;
 		}
 
 		private Transform GetHand(Transform rightHand, Transform leftHand)
@@ -44,6 +49,15 @@ namespace RPGCourse.Combat
 			Projectile projectileInstance = 
 			Instantiate(projectile, GetHand(rightHand, leftHand).position, Quaternion.identity);
 			projectileInstance.SetTarget(target, weaponDamage);
+		}
+
+		public void DestroyEquippedWeapon(Transform rightHand, Transform leftHand)
+		{
+			Transform equippedWeapon = rightHand.Find(weaponName);
+			if(equippedWeapon == null) equippedWeapon = leftHand.Find(weaponName);
+			if(!equippedWeapon) return;
+			equippedWeapon.name = "DestroyingWeapon";
+			Destroy(equippedWeapon.gameObject);
 		}
 
 		public bool HasProjectile()
