@@ -11,6 +11,9 @@ namespace RPGCourse.Combat
 		[SerializeField] float speed = 1;
 		[SerializeField] bool isHoming = false;
 		[SerializeField] GameObject hitVFX = null;
+		[SerializeField] float maxLifeTime = 10;
+		[SerializeField] GameObject[] destroyOnHit = null;
+		[SerializeField] float lifeAfterImpact = 1;
 
 		//Cache
 		Health target = null;
@@ -22,7 +25,7 @@ namespace RPGCourse.Combat
 		{
 			if(target == null) return;
 			transform.LookAt(GetAimLocation());
-			Destroy(gameObject, 5f);
+			Destroy(gameObject, maxLifeTime);
 		}
 
 		private void Update()
@@ -50,12 +53,19 @@ namespace RPGCourse.Combat
 		private void OnTriggerEnter(Collider other)
 		{
 			if (other.GetComponent<Health>() != target || !target.IsAlive()) return;
+			speed = 0;
 			target.TakeDamage(damage);
+
 			if(hitVFX != null)
 			{
 				GameObject impactVFX = Instantiate(hitVFX, transform.position, transform.rotation);
 			} 
-			Destroy(gameObject);
+
+			foreach(GameObject toDestroy in destroyOnHit)
+			{
+				Destroy(toDestroy);
+			}
+			Destroy(gameObject, lifeAfterImpact);
 		}
 	}
 

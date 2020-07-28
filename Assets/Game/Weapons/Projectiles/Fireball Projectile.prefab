@@ -4860,6 +4860,10 @@ MonoBehaviour:
   speed: 40
   isHoming: 0
   hitVFX: {fileID: 2302457091093092515, guid: 69d1b1037536b504884c93bb73d662db, type: 3}
+  maxLifeTime: 10
+  destroyOnHit:
+  - {fileID: 3575627908353486480}
+  lifeAfterImpact: 0.5
 --- !u!136 &1736232170847126446
 CapsuleCollider:
   m_ObjectHideFlags: 0
