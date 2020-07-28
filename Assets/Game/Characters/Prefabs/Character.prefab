@@ -80,7 +80,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rightHandTransform: {fileID: 0}
   leftHandTransform: {fileID: 0}
-  defaultWeapon: {fileID: 0}
+  defaultWeapon: {fileID: 11400000, guid: de81ea0719541bb4688b333b59b277de, type: 2}
 --- !u!114 &2706950228725019495
 MonoBehaviour:
   m_ObjectHideFlags: 0

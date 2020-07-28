@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using RPGCourse.Movement;
 using RPGCourse.Core;
+using RPGCourse.Saving;
 
 namespace RPGCourse.Combat
 {
-	public class Fighter : MonoBehaviour, IAction
+	public class Fighter : MonoBehaviour, IAction, ISaveable
 	{
 		//Config parameters
 		[SerializeField] Transform rightHandTransform = null;
@@ -30,7 +31,7 @@ namespace RPGCourse.Combat
 
 		private void Start()
 		{
-			EquipWeapon(defaultWeapon);
+			if(currentWeapon == null) EquipWeapon(defaultWeapon);
 		}
 
 		private void Update()
@@ -39,9 +40,9 @@ namespace RPGCourse.Combat
 			GetInRange();
 		}
 
-		public void EquipWeapon(Weapon weaponType)
+		public void EquipWeapon(Weapon weapon)
 		{
-			currentWeapon = weaponType;
+			currentWeapon = weapon;
 			currentWeapon.Spawn(rightHandTransform, leftHandTransform, animator);
 		}
 
@@ -123,6 +124,22 @@ namespace RPGCourse.Combat
 
 			Health targetToTest = combatTarget.GetComponent<Health>();
 			return targetToTest != null && targetToTest.IsAlive();
+		}
+
+		public object CaptureState()
+		{
+			return currentWeapon.name;
+		}
+
+		public void RestoreState(object state)
+		{
+			if(tag == "Player")
+			{
+				string weaponName = (string)state;
+				Weapon weaponToLoad = Resources.Load<Weapon>(weaponName);
+				EquipWeapon(weaponToLoad);
+			}
+			else EquipWeapon(defaultWeapon);
 		}
 	}
 }
