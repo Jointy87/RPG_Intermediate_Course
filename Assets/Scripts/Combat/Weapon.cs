@@ -32,7 +32,13 @@ namespace RPGCourse.Combat
 				spawnedWeapon.name = weaponName;
 			}
 
-			if (animatorOverride != null) animator.runtimeAnimatorController = animatorOverride;
+			//If casting fails (in this case if it's normal animator) it will return null.
+			//Either normal animator or animator override
+			var overrideController = animator.runtimeAnimatorController as AnimatorOverrideController;
+			
+			if(animatorOverride != null) animator.runtimeAnimatorController = animatorOverride;
+			else if (overrideController != null) 
+				animator.runtimeAnimatorController = overrideController.runtimeAnimatorController;
 		}
 
 		private Transform GetHand(Transform rightHand, Transform leftHand)
