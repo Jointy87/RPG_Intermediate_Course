@@ -2,20 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using RPGCourse.Saving;
+using RPGCourse.Stats;
+using RPGCourse.Core;
 
-namespace RPGCourse.Core
+namespace RPGCourse.Resources
 {
 	public class Health : MonoBehaviour, ISaveable
 	{
-		//Config parameters
-		[SerializeField] float healthPoints = 100f;
-
 		//Cache
 		bool isAlive = true;
+
+		//States
+		float healthPoints;
+
+		private void Start() 
+		{
+			healthPoints = GetComponent<BaseStats>().FetchHealth();
+		}
 
 		public bool IsAlive()
 		{
 			return isAlive;
+		}
+
+		public float FetchHealthPercentage()
+		{
+			return 100 * (healthPoints / GetComponent<BaseStats>().FetchHealth());
 		}
 
 

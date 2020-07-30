@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using RPGCourse.Core;
+using RPGCourse.Resources;
 
 namespace RPGCourse.Combat
 {	

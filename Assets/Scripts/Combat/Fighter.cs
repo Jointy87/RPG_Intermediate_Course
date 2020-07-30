@@ -4,6 +4,7 @@ using UnityEngine;
 using RPGCourse.Movement;
 using RPGCourse.Core;
 using RPGCourse.Saving;
+using RPGCourse.Resources;
 
 namespace RPGCourse.Combat
 {
@@ -136,7 +137,8 @@ namespace RPGCourse.Combat
 			if(tag == "Player")
 			{
 				string weaponName = (string)state;
-				Weapon weaponToLoad = Resources.Load<Weapon>(weaponName);
+				Weapon weaponToLoad = 
+					UnityEngine.Resources.Load<Weapon>(weaponName);
 				EquipWeapon(weaponToLoad);
 			}
 			else EquipWeapon(defaultWeapon);

@@ -1,8 +1,11 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using RPGCourse.Combat;
 using RPGCourse.Core;
 using RPGCourse.Movement;
 using RPGCourse.Saving;
+using RPGCourse.Resources;
 
 namespace RPGCourse.Control
 {
