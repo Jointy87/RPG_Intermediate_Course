@@ -88,11 +88,11 @@ namespace RPGCourse.Combat
 
 			if(currentWeapon.HasProjectile())
 			{
-				currentWeapon.LaunchProjectile(rightHandTransform, leftHandTransform, target);
+				currentWeapon.LaunchProjectile(rightHandTransform, leftHandTransform, target, gameObject);
 				return;
 			}
 			
-			target.TakeDamage(currentWeapon.FetchDamage());
+			target.TakeDamage(gameObject, currentWeapon.FetchDamage());
 		}
 
 		void Shoot() //Animation Event
@@ -125,6 +125,11 @@ namespace RPGCourse.Combat
 
 			Health targetToTest = combatTarget.GetComponent<Health>();
 			return targetToTest != null && targetToTest.IsAlive();
+		}
+
+		public Health FetchTarget()
+		{
+			return target;
 		}
 
 		public object CaptureState()

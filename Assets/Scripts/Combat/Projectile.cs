@@ -21,6 +21,7 @@ namespace RPGCourse.Combat
 
 		//States
 		float damage = 0;
+		GameObject instigator = null;
 
 		private void Start() 
 		{
@@ -45,17 +46,18 @@ namespace RPGCourse.Combat
 			return target.transform.position + Vector3.up * targetCollider.height / 2;
 		}
 
-		public void SetTarget(Health incomingTarget, float weaponDamage)
+		public void SetTarget(Health incomingTarget, float weaponDamage, GameObject instigator)
 		{
 			target = incomingTarget;
 			damage = weaponDamage;
+			this.instigator = instigator;
 		}
 
 		private void OnTriggerEnter(Collider other)
 		{
 			if (other.GetComponent<Health>() != target || !target.IsAlive()) return;
 			speed = 0;
-			target.TakeDamage(damage);
+			target.TakeDamage(instigator, damage);
 
 			if(hitVFX != null)
 			{

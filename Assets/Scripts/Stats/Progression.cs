@@ -10,6 +10,7 @@ namespace RPGCourse.Stats
 		{
 			[SerializeField] CharacterClass characterClass;
 			[SerializeField] float[] health;
+			[SerializeField] float[] exp;
 
 			public CharacterClass FetchCharacterClass()
 			{
@@ -19,6 +20,11 @@ namespace RPGCourse.Stats
 			public float FetchHealth(int value)
 			{
 				return health[value];
+			}
+
+			public float FetchExperience(int value)
+			{
+				return exp[value];
 			}
 		}
 
@@ -32,6 +38,18 @@ namespace RPGCourse.Stats
 
 				float healthValue = character.FetchHealth(level - 1);
 				return healthValue;
+			}
+			return 0;
+		}
+
+		public float FetchExperience(CharacterClass incomingClass, int level)
+		{
+			foreach (ProgressionCharacerClass character in characterClasses)
+			{
+				if (character.FetchCharacterClass() != incomingClass) continue;
+
+				float expValue = character.FetchExperience(level - 1);
+				return expValue;
 			}
 			return 0;
 		}

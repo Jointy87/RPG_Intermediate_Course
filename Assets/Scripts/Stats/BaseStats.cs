@@ -15,5 +15,10 @@ namespace RPGCourse.Stats
 		{
 			return progression.FetchHealth(characterClass, startingLevel);
 		}
+
+		public float FetchExperience()
+		{
+			return progression.FetchExperience(characterClass, startingLevel);
+		}
 	}
 }

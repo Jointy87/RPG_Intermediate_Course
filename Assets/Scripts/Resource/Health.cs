@@ -31,12 +31,14 @@ namespace RPGCourse.Resources
 		}
 
 
-		public void TakeDamage(float damage)
+		public void TakeDamage(GameObject instigator, float damage)
 		{
 			healthPoints = Mathf.Max(healthPoints - damage, 0); // takes highest value, in this case either health - damage, or 0
 			if (healthPoints == 0)
 			{
 				Die();
+				RewardExperience(instigator);
+
 			}
 		}
 
@@ -47,6 +49,13 @@ namespace RPGCourse.Resources
 			isAlive = false;
 			GetComponent<Animator>().SetTrigger("die");
 			GetComponent<ActionScheduler>().CancelCurrentAction();
+		}
+
+		private void RewardExperience(GameObject instigator)
+		{
+			if (!instigator.GetComponent<Experience>()) return;
+			float expToReward = GetComponent<BaseStats>().FetchExperience();
+			instigator.GetComponent<Experience>().AddExperience(expToReward);
 		}
 
 		public object CaptureState()
