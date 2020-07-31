@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using RPGCourse.Saving;
 
-namespace RPGCourse.Resources
+namespace RPGCourse.Stats
 {
 	public class Experience : MonoBehaviour, ISaveable
 	{

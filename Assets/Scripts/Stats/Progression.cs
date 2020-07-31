@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace RPGCourse.Stats
 {
@@ -22,21 +25,43 @@ namespace RPGCourse.Stats
 			public float[] levels;
 		}
 
+		Dictionary<CharacterClass, Dictionary<Stat, float[]>> lookupTable = null;
+
 		public float FetchStat(Stat incomingStat, CharacterClass incomingClass, int level)
 		{
-			foreach(ProgressionCharacerClass character in characterClasses)
+			BuildLookup();
+
+			float[] levels = lookupTable[incomingClass][incomingStat];
+
+			if (level > levels.Length)  return 0;
+			return levels[level - 1];
+		}
+
+		public int FetchAmountOfLevels(Stat incomingStat, CharacterClass incomingClass)
+		{
+			BuildLookup();
+
+			float[] levels = lookupTable[incomingClass][incomingStat];
+			return levels.Length;
+		}
+
+		private void BuildLookup()
+		{
+			if(lookupTable != null) return;
+
+			lookupTable = new Dictionary<CharacterClass, Dictionary<Stat, float[]>>();
+
+			foreach (ProgressionCharacerClass progClass in characterClasses)
 			{
-				if(character.characterClass != incomingClass) continue;
+				Dictionary<Stat, float[]> statLookupTable = new Dictionary<Stat, float[]>();
 
-				foreach(ProgressionStat progStat in character.stats)
+				foreach (ProgressionStat progStat in progClass.stats)
 				{
-					if(progStat.stat != incomingStat) continue;
-					if(level > progStat.levels.Length) continue;
-
-					return progStat.levels[level - 1];
+					statLookupTable[progStat.stat] = progStat.levels;
 				}
+
+				lookupTable[progClass.characterClass] = statLookupTable;
 			}
-			return 0;
 		}
 	}
 }
