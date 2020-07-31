@@ -5,51 +5,36 @@ namespace RPGCourse.Stats
 	[CreateAssetMenu(fileName = "Progression", menuName = "Stats/New Progression", order = 0)]
 	public class Progression : ScriptableObject
 	{
+		//Config parameters
+		[SerializeField] ProgressionCharacerClass[] characterClasses = null;
+
 		[System.Serializable]
 		class ProgressionCharacerClass
 		{
-			[SerializeField] CharacterClass characterClass;
-			[SerializeField] float[] health;
-			[SerializeField] float[] exp;
-
-			public CharacterClass FetchCharacterClass()
-			{
-				return characterClass;
-			}
-
-			public float FetchHealth(int value)
-			{
-				return health[value];
-			}
-
-			public float FetchExperience(int value)
-			{
-				return exp[value];
-			}
+			public CharacterClass characterClass;
+			public ProgressionStat[] stats;
 		}
 
-		[SerializeField] ProgressionCharacerClass[] characterClasses;
+		[System.Serializable]
+		class ProgressionStat
+		{
+			public Stat stat;
+			public float[] levels;
+		}
 
-		public float FetchHealth(CharacterClass incomingClass, int level)
+		public float FetchStat(Stat incomingStat, CharacterClass incomingClass, int level)
 		{
 			foreach(ProgressionCharacerClass character in characterClasses)
 			{
-				if(character.FetchCharacterClass() != incomingClass) continue;
+				if(character.characterClass != incomingClass) continue;
 
-				float healthValue = character.FetchHealth(level - 1);
-				return healthValue;
-			}
-			return 0;
-		}
+				foreach(ProgressionStat progStat in character.stats)
+				{
+					if(progStat.stat != incomingStat) continue;
+					if(level > progStat.levels.Length) continue;
 
-		public float FetchExperience(CharacterClass incomingClass, int level)
-		{
-			foreach (ProgressionCharacerClass character in characterClasses)
-			{
-				if (character.FetchCharacterClass() != incomingClass) continue;
-
-				float expValue = character.FetchExperience(level - 1);
-				return expValue;
+					return progStat.levels[level - 1];
+				}
 			}
 			return 0;
 		}

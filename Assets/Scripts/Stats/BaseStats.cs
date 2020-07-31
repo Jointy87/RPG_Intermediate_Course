@@ -11,14 +11,9 @@ namespace RPGCourse.Stats
 		[SerializeField] CharacterClass characterClass;
 		[SerializeField] Progression progression = null;
 
-		public float FetchHealth()
+		public float FetchStat(Stat stat)
 		{
-			return progression.FetchHealth(characterClass, startingLevel);
-		}
-
-		public float FetchExperience()
-		{
-			return progression.FetchExperience(characterClass, startingLevel);
+			return progression.FetchStat(stat, characterClass, startingLevel);
 		}
 	}
 }

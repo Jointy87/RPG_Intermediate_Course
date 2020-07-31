@@ -17,7 +17,7 @@ namespace RPGCourse.Resources
 
 		private void Start() 
 		{
-			healthPoints = GetComponent<BaseStats>().FetchHealth();
+			healthPoints = GetComponent<BaseStats>().FetchStat(Stat.Health);
 		}
 
 		public bool IsAlive()
@@ -27,7 +27,7 @@ namespace RPGCourse.Resources
 
 		public float FetchHealthPercentage()
 		{
-			return 100 * (healthPoints / GetComponent<BaseStats>().FetchHealth());
+			return 100 * (healthPoints / GetComponent<BaseStats>().FetchStat(Stat.Health));
 		}
 
 
@@ -54,7 +54,7 @@ namespace RPGCourse.Resources
 		private void RewardExperience(GameObject instigator)
 		{
 			if (!instigator.GetComponent<Experience>()) return;
-			float expToReward = GetComponent<BaseStats>().FetchExperience();
+			float expToReward = GetComponent<BaseStats>().FetchStat(Stat.ExpReward);
 			instigator.GetComponent<Experience>().AddExperience(expToReward);
 		}
 
