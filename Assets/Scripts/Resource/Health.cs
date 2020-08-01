@@ -17,7 +17,8 @@ namespace RPGCourse.Resources
 
 		private void Start() 
 		{
-			healthPoints = GetComponent<BaseStats>().FetchStat(Stat.Health);
+			if(healthPoints != GetComponent<BaseStats>().FetchStat(Stat.Health)) return;
+			else healthPoints = GetComponent<BaseStats>().FetchStat(Stat.Health);
 		}
 
 		public bool IsAlive()

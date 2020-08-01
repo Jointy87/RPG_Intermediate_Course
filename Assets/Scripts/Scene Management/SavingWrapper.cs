@@ -29,6 +29,12 @@ namespace RPGCourse.SceneManagement
 			{
 				Load();
 			}
+
+			if(Input.GetKeyDown(KeyCode.Delete))
+			{
+				Delete();
+			}
+
 		}
 
 		public void Save()
@@ -39,6 +45,11 @@ namespace RPGCourse.SceneManagement
 		public void Load()
 		{
 			GetComponent<SavingSystem>().Load(defaultSaveFile);
+		}
+
+		public void Delete()
+		{
+			GetComponent<SavingSystem>().Delete(defaultSaveFile);
 		}
 	}
 }
