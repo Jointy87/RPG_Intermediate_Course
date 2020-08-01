@@ -26,15 +26,19 @@ namespace RPGCourse.Stats
 
 		public float FetchStat(Stat stat)
 		{
-			return progression.FetchStat(stat, characterClass, startingLevel);
+			return progression.FetchStat(stat, characterClass, FetchLevel());
 		}
 
 		public int FetchLevel()
 		{
-			float currentXP =  GetComponent<Experience>().FetchExperience();
+			Experience experience = GetComponent<Experience>();
+			if (!experience) return startingLevel;
+
+			float currentXP = experience.FetchExperience();
+			 
 			int penultimateLevel = progression.FetchAmountOfLevels(Stat.ExpToLevel, characterClass);
 
-			for (int level = 1; level < penultimateLevel; level++)
+			for (int level = 1; level <= penultimateLevel; level++)
 			{
 				float xpToLevelUp = progression.FetchStat(Stat.ExpToLevel, characterClass, level);
 
@@ -44,7 +48,6 @@ namespace RPGCourse.Stats
 				}				
 			}
 			return penultimateLevel + 1;
-			
 		}
 	}
 }

@@ -13,6 +13,7 @@ namespace RPGCourse.Stats
 		public void AddExperience(float value)
 		{
 			expPoints += value;
+			FindObjectOfType<LevelDisplay>().PrintLevel();
 		}
 
 		public float FetchExperience()
