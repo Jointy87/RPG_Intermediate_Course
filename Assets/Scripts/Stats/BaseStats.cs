@@ -16,14 +16,6 @@ namespace RPGCourse.Stats
 		//States
 		int currentLevel = 1;
 
-		private void Update() 
-		{
-			if(gameObject.tag == "Player")
-			{
-				print(FetchLevel());
-			}
-		}
-
 		public float FetchStat(Stat stat)
 		{
 			return progression.FetchStat(stat, characterClass, FetchLevel());

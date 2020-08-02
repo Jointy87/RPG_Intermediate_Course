@@ -9,16 +9,14 @@ namespace RPGCourse.Resources
 {
 	public class Health : MonoBehaviour, ISaveable
 	{
-		//Cache
-		bool isAlive = true;
-
 		//States
-		float healthPoints;
+		bool isAlive = true;
+		float healthPoints = -1f; 
+		//Upon death, healthPoints = 0. -1 can never happen in-game. By initializing as -1, at start you check if it's below 0 to know if it's the initialized value or loaded value to fix race condition.
 
 		private void Start() 
 		{
-			if(healthPoints != GetComponent<BaseStats>().FetchStat(Stat.Health)) return;
-			else healthPoints = GetComponent<BaseStats>().FetchStat(Stat.Health);
+			if(healthPoints < 0) healthPoints = GetComponent<BaseStats>().FetchStat(Stat.Health);
 		}
 
 		public bool IsAlive()
