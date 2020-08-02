@@ -11,8 +11,7 @@ namespace RPGCourse.Resources
 	{
 		//States
 		bool isAlive = true;
-		float healthPoints = -1f; 
-		//Upon death, healthPoints = 0. -1 can never happen in-game. By initializing as -1, at start you check if it's below 0 to know if it's the initialized value or loaded value to fix race condition.
+		float healthPoints = -1f; //Upon death, healthPoints = 0. -1 can never happen in-game. By initializing as -1, at start you check if it's below 0 to know if it's the initialized value or loaded value to fix race condition.
 
 		private void Start() 
 		{

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using RPGCourse.Saving;
 
@@ -10,9 +11,12 @@ namespace RPGCourse.Stats
 		//States
 		float expPoints = 0;
 
+		public event Action onExperienceGained; //delegates are a good way to inverse dependencies
+
 		public void AddExperience(float value)
 		{
 			expPoints += value;
+			onExperienceGained();
 			FindObjectOfType<LevelDisplay>().PrintLevel();
 		}
 

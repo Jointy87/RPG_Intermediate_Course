@@ -14,7 +14,24 @@ namespace RPGCourse.Stats
 		[SerializeField] Progression progression = null;
 
 		//States
-		int currentLevel = 1;
+		int currentLevel = 0; //Not a valid level but we do this to make sure we correctly initialize it via starting level or exp
+		
+		private void Start() 
+		{
+			currentLevel = CalculateLevel();
+			Experience experience = GetComponent<Experience>();
+			if(experience != null) experience.onExperienceGained += UpdateLevel;
+		}
+
+		private void UpdateLevel() 
+		{
+			int newLevel = FetchLevel();
+			if(newLevel > currentLevel)
+			{
+				currentLevel = newLevel;
+				print("Levelled Up");
+			}
+		}
 
 		public float FetchStat(Stat stat)
 		{
@@ -22,6 +39,11 @@ namespace RPGCourse.Stats
 		}
 
 		public int FetchLevel()
+		{
+			return currentLevel;
+		}
+
+		public int CalculateLevel()
 		{
 			Experience experience = GetComponent<Experience>();
 			if (!experience) return startingLevel;
