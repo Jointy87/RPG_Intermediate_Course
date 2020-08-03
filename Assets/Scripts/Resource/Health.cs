@@ -12,18 +12,34 @@ namespace RPGCourse.Resources
 		//Config parameters
 		[SerializeField] float healthRegenPercentage = 75;
 
+		//Cache
+		BaseStats baseStats;
+
 		//States
 		bool isAlive = true;
 		float statHealth;
 		float healthPoints = -1f; //Upon death, healthPoints = 0. -1 can never happen in-game. By initializing as -1, at start you check if it's below 0 to know if it's the initialized value or loaded value to fix race condition.
 
+		private void Awake() 
+		{
+			baseStats = GetComponent<BaseStats>();
+		}
+
+		private void OnEnable() 
+		{
+			if (baseStats != null) baseStats.onLevelUp += RestoreHealth;
+		}
+
+		private void OnDisable() 
+		{
+			if (baseStats != null) baseStats.onLevelUp -= RestoreHealth;
+		}
+
 		private void Start() 
 		{
-			BaseStats baseStats = GetComponent<BaseStats>();
 			statHealth = baseStats.FetchStat(Stat.Health);
 
 			if(healthPoints < 0) healthPoints = statHealth;
-			if(baseStats != null) baseStats.onLevelUp += RestoreHealth;
 		}
 
 		public float FetchMaxhealth()

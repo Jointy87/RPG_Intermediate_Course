@@ -62,7 +62,7 @@ namespace RPGCourse.Combat
 			projectileInstance.SetTarget(target, damageOutput, instigator);
 		}
 
-		public void DestroyEquippedWeapon(Transform rightHand, Transform leftHand)
+		private void DestroyEquippedWeapon(Transform rightHand, Transform leftHand)
 		{
 			Transform equippedWeapon = rightHand.Find(weaponName);
 			if(equippedWeapon == null) equippedWeapon = leftHand.Find(weaponName);

@@ -15,19 +15,35 @@ namespace RPGCourse.Stats
 		[SerializeField] Progression progression = null;
 		[SerializeField] GameObject levelUpVFX;
 		[SerializeField] bool shouldUseModifiers = false;
+		
+		//Cache
+		Experience experience;
 
 		//States
 		int currentLevel = 0; //Not a valid level but we do this to make sure we correctly initialize it via starting level or exp
 
 		public event Action onLevelUp;
 
+		private void Awake() 
+		{
+			experience = GetComponent<Experience>();
+		}
+
+		private void OnEnable()
+		{
+			if (experience != null) experience.onExperienceGained += UpdateLevel;
+		}
+		
+		private void OnDisable()
+		{
+			if (experience != null) experience.onExperienceGained -= UpdateLevel;
+		}
+
 		private void Start() 
 		{
 			currentLevel = CalculateLevel();
-			Experience experience = GetComponent<Experience>();
-			if(experience != null) experience.onExperienceGained += UpdateLevel;
 		}
-
+		
 		private void UpdateLevel() 
 		{
 			if(gameObject.tag != "Player") return;
@@ -95,7 +111,6 @@ namespace RPGCourse.Stats
 
 		private int CalculateLevel()
 		{
-			Experience experience = GetComponent<Experience>();
 			if (!experience) return startingLevel;
 
 			float currentXP = experience.FetchExperience();
