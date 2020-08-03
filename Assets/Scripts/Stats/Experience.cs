@@ -17,7 +17,6 @@ namespace RPGCourse.Stats
 		{
 			expPoints += value;
 			onExperienceGained();
-			FindObjectOfType<LevelDisplay>().PrintLevel();
 		}
 
 		public float FetchExperience()

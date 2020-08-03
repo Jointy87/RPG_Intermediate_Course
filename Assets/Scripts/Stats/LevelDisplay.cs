@@ -14,14 +14,11 @@ namespace RPGCourse.Stats
 		void Awake()
 		{
 			baseStats = GameObject.FindGameObjectWithTag("Player").GetComponent<BaseStats>();
-			text = GetComponent<Text>();
-
-			text.text = baseStats.FetchLevel().ToString();
 		}
 
-		public void PrintLevel()
+		private void Update() 
 		{
-			text.text = baseStats.FetchLevel().ToString();
+			GetComponent<Text>().text = string.Format("{0:0}", baseStats.FetchLevel());
 		}
 	}
 }

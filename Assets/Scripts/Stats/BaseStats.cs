@@ -25,11 +25,12 @@ namespace RPGCourse.Stats
 
 		private void UpdateLevel() 
 		{
-			int newLevel = FetchLevel();
+			if(gameObject.tag != "Player") return;
+
+			int newLevel = CalculateLevel();
 			if(newLevel > currentLevel)
 			{
 				currentLevel = newLevel;
-				print("Levelled Up");
 			}
 		}
 
@@ -40,6 +41,7 @@ namespace RPGCourse.Stats
 
 		public int FetchLevel()
 		{
+			if(currentLevel < 1) currentLevel = CalculateLevel();
 			return currentLevel;
 		}
 
