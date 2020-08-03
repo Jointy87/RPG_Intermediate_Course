@@ -26,17 +26,18 @@ namespace RPGCourse.Resources
 		{
 			if(isPlayer)
 			{
-				healthText.text = string.Format("{0:0}%", health.FetchHealthPercentage().ToString());
+				healthText.text = string.Format("{0:0}/{1:0}", health.FetchHealth(), health.FetchMaxhealth());
 			}
 			else
 			{
 				if (fighter.FetchTarget() == null)
 				{
-					healthText.text = "no target";
+					healthText.text = "N/A";
 					return;
 				} 
 				
-				healthText.text = string.Format("{0:0}%", fighter.FetchTarget().FetchHealthPercentage().ToString());
+				healthText.text = string.Format("{0:0}/{1:0}", 
+					fighter.FetchTarget().FetchHealth(), fighter.FetchTarget().FetchMaxhealth());
 			}
 			
 		}

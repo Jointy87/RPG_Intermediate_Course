@@ -5,10 +5,11 @@ using RPGCourse.Movement;
 using RPGCourse.Core;
 using RPGCourse.Saving;
 using RPGCourse.Resources;
+using RPGCourse.Stats;
 
 namespace RPGCourse.Combat
 {
-	public class Fighter : MonoBehaviour, IAction, ISaveable
+	public class Fighter : MonoBehaviour, IAction, ISaveable, IModifierProvider
 	{
 		//Config parameters
 		[SerializeField] Transform rightHandTransform = null;
@@ -86,13 +87,16 @@ namespace RPGCourse.Combat
 		{
 			if (!target) return;
 
+			float damageOutput = GetComponent<BaseStats>().FetchStat(Stat.DamageOutput);
+
 			if(currentWeapon.HasProjectile())
 			{
-				currentWeapon.LaunchProjectile(rightHandTransform, leftHandTransform, target, gameObject);
+				currentWeapon.LaunchProjectile
+					(rightHandTransform, leftHandTransform, target, gameObject, damageOutput);
 				return;
 			}
 			
-			target.TakeDamage(gameObject, currentWeapon.FetchDamage());
+			target.TakeDamage(gameObject, damageOutput);
 		}
 
 		void Shoot() //Animation Event
@@ -130,6 +134,23 @@ namespace RPGCourse.Combat
 		public Health FetchTarget()
 		{
 			return target;
+		}
+
+		//using IEnumerable here so that we can return an empty list if stats don't match up. Or we can return multiple things if we were using 2 weapons at the same time
+		public IEnumerable<float> FetchAdditiveModifiers(Stat stat)
+		{
+			if(stat == Stat.DamageOutput)
+			{
+				yield return currentWeapon.FetchDamage();
+			}
+		}
+
+		public IEnumerable<float> FetchPercentageModifiers(Stat stat)
+		{
+			if(stat == Stat.DamageOutput)
+			{
+				yield return currentWeapon.FetchPercentageBonus();
+			}
 		}
 
 		public object CaptureState()

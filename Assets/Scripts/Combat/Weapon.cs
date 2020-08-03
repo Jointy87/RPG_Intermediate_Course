@@ -12,6 +12,7 @@ namespace RPGCourse.Combat
 		[SerializeField] float weaponRange = 2f;
 		[SerializeField] float attackInterval = .5f;
 		[SerializeField] float weaponDamage = 10f;
+		[SerializeField] float percentageBonus = 0;
 		[SerializeField] GameObject equippedPrefab = null;
 		[SerializeField] AnimatorOverrideController animatorOverride = null;
 		[SerializeField] bool isLeftHanded = false;
@@ -52,11 +53,13 @@ namespace RPGCourse.Combat
 			return handTransform;
 		}
 
-		public void LaunchProjectile(Transform rightHand, Transform leftHand, Health target, GameObject instigator)
+		public void LaunchProjectile(Transform rightHand, Transform leftHand, 
+			Health target, GameObject instigator, float damageOutput)
 		{
 			Projectile projectileInstance = 
-			Instantiate(projectile, GetHand(rightHand, leftHand).position, Quaternion.identity);
-			projectileInstance.SetTarget(target, weaponDamage, instigator);
+				Instantiate(projectile, GetHand(rightHand, leftHand).position, Quaternion.identity);
+				
+			projectileInstance.SetTarget(target, damageOutput, instigator);
 		}
 
 		public void DestroyEquippedWeapon(Transform rightHand, Transform leftHand)
@@ -86,6 +89,11 @@ namespace RPGCourse.Combat
 		public float FetchDamage()
 		{
 			return weaponDamage;
+		}
+
+		public float FetchPercentageBonus()
+		{
+			return percentageBonus;
 		}
 
 	}

@@ -4,6 +4,7 @@ namespace RPGCourse.Stats
 	{
 		Health,
 		ExpReward,
-		ExpToLevel
+		ExpToLevel,
+		DamageOutput
 	}
 }

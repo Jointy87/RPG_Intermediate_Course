@@ -11,7 +11,7 @@ namespace RPGCourse.Stats
 		//States
 		float expPoints = 0;
 
-		public event Action onExperienceGained; //delegates are a good way to inverse dependencies
+		public event Action onExperienceGained; //delegates are a good way to invert dependencies
 
 		public void AddExperience(float value)
 		{
