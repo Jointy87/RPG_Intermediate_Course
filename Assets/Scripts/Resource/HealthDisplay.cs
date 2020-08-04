@@ -26,7 +26,7 @@ namespace RPGCourse.Resources
 		{
 			if(isPlayer)
 			{
-				healthText.text = string.Format("{0:0}/{1:0}", health.FetchHealth(), health.FetchMaxhealth());
+				healthText.text = string.Format("{0:0}/{1:0}", health.FetchHealth(), health.FetchMaxHealth());
 			}
 			else
 			{
@@ -37,7 +37,7 @@ namespace RPGCourse.Resources
 				} 
 				
 				healthText.text = string.Format("{0:0}/{1:0}", 
-					fighter.FetchTarget().FetchHealth(), fighter.FetchTarget().FetchMaxhealth());
+					fighter.FetchTarget().FetchHealth(), fighter.FetchTarget().FetchMaxHealth());
 			}
 			
 		}

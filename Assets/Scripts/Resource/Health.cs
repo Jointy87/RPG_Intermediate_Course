@@ -18,13 +18,12 @@ namespace RPGCourse.Resources
 
 		//States
 		bool isAlive = true;
-		float statHealth;
 		LazyValue<float> healthPoints; 
 
 		private void Awake() 
 		{
 			baseStats = GetComponent<BaseStats>();
-			healthPoints = new LazyValue<float>(FetchInitialHealth);
+			healthPoints = new LazyValue<float>(FetchMaxHealth);
 		}
 
 		private void OnEnable() 
@@ -42,14 +41,9 @@ namespace RPGCourse.Resources
 			healthPoints.ForceInit();
 		}
 
-		private float FetchInitialHealth()
+		public float FetchMaxHealth()
 		{
 			return baseStats.FetchStat(Stat.Health);
-		}
-
-		public float FetchMaxhealth()
-		{
-			return statHealth;
 		}
 
 		public void TakeDamage(GameObject instigator, float damage)
@@ -84,7 +78,7 @@ namespace RPGCourse.Resources
 
 		private void RestoreHealth()
 		{
-			float regenHealthPoints = statHealth * (healthRegenPercentage / 100);
+			float regenHealthPoints = baseStats.FetchStat(Stat.Health) * (healthRegenPercentage / 100);
 			healthPoints.value = Mathf.Max(healthPoints.value, regenHealthPoints);
 		}
 		
