@@ -9,9 +9,22 @@ namespace RPGCourse.Control
 {
 	public class PlayerController : MonoBehaviour
 	{	
+		//Config parameters
+		[SerializeField] CursorMapping[] cursorMappings = null;
+
 		//Cache
 		Health health;
 		Fighter fighter;
+
+		enum CursorType {None, Movement, Combat}
+
+		[System.Serializable]
+		struct CursorMapping
+		{
+			public CursorType type;
+			public Texture2D texture;
+			public Vector2 hotspot;
+		}
 
 		void Awake() 
 		{
@@ -25,6 +38,8 @@ namespace RPGCourse.Control
 
 			if (ControlCombat()) return;
 			else if (ControlMovement()) return;
+
+			SetCursor(CursorType.None);
 		}
 
 		private bool ControlCombat()
@@ -41,6 +56,7 @@ namespace RPGCourse.Control
 				{
 					fighter.Attack(target.gameObject);
 				}
+				SetCursor(CursorType.Combat);
 				return true;
 			}
 			return false;
@@ -57,6 +73,7 @@ namespace RPGCourse.Control
 				{
 					GetComponent<Mover>().StartMoveAction(hit.point, 1f);
 				} 
+				SetCursor(CursorType.Movement);
 				return true;
 			}
 			return false;
@@ -65,6 +82,21 @@ namespace RPGCourse.Control
 		private static Ray GetMouseRay()
 		{
 			return Camera.main.ScreenPointToRay(Input.mousePosition);
+		}
+
+		private void SetCursor(CursorType type)
+		{
+			CursorMapping mapping = GetCursorMapping(type);
+			Cursor.SetCursor(mapping.texture, mapping.hotspot, CursorMode.Auto);
+		}
+
+		private CursorMapping GetCursorMapping(CursorType type)
+		{
+			foreach(CursorMapping mapping in cursorMappings)
+			{
+				if(mapping.type == type) return mapping;
+			}
+			return cursorMappings[0];
 		}
 	}
 

@@ -6,6 +6,7 @@ using RPGCourse.Core;
 using RPGCourse.Movement;
 using RPGCourse.Saving;
 using RPGCourse.Resources;
+using GameDevTV.Utils;
 
 namespace RPGCourse.Control
 {
@@ -32,7 +33,7 @@ namespace RPGCourse.Control
 		Mover mover;
 		
 		//States
-		Vector3 guardPosition;
+		LazyValue<Vector3> guardPosition;
 		float timeSinceLastSawPlayer = Mathf.Infinity;
 		float timeDwelledAtWaypoint = Mathf.Infinity;	
 		int waypointIndex = 0;
@@ -44,11 +45,12 @@ namespace RPGCourse.Control
 			player = GameObject.FindWithTag("Player");
 			health = GetComponent<Health>();
 			mover = GetComponent<Mover>();
+			guardPosition = new LazyValue<Vector3>(SetInitialGuardPosition);
 		}
 
 		private void Start() 
 		{
-			guardPosition = transform.position;
+			guardPosition.ForceInit();
 		}
 
 		void Update()
@@ -57,6 +59,11 @@ namespace RPGCourse.Control
 
 			UpdateTimers();
 			ChaseAndAttackPlayer();
+		}
+
+		private Vector3 SetInitialGuardPosition()
+		{
+			return transform.position;
 		}
 
 		private void UpdateTimers()
@@ -93,7 +100,7 @@ namespace RPGCourse.Control
 		
 		private void PatrolBehaviour()
 		{
-			nextPosition = guardPosition;
+			nextPosition = guardPosition.value;
 
 			if(patrolPath != null)
 			{

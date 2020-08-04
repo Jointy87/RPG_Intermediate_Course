@@ -4,6 +4,7 @@ using UnityEngine;
 using RPGCourse.Saving;
 using RPGCourse.Stats;
 using RPGCourse.Core;
+using GameDevTV.Utils;
 
 namespace RPGCourse.Resources
 {
@@ -18,11 +19,12 @@ namespace RPGCourse.Resources
 		//States
 		bool isAlive = true;
 		float statHealth;
-		float healthPoints = -1f; //Upon death, healthPoints = 0. -1 can never happen in-game. By initializing as -1, at start you check if it's below 0 to know if it's the initialized value or loaded value to fix race condition.
+		LazyValue<float> healthPoints; 
 
 		private void Awake() 
 		{
 			baseStats = GetComponent<BaseStats>();
+			healthPoints = new LazyValue<float>(FetchInitialHealth);
 		}
 
 		private void OnEnable() 
@@ -37,9 +39,12 @@ namespace RPGCourse.Resources
 
 		private void Start() 
 		{
-			statHealth = baseStats.FetchStat(Stat.Health);
+			healthPoints.ForceInit();
+		}
 
-			if(healthPoints < 0) healthPoints = statHealth;
+		private float FetchInitialHealth()
+		{
+			return baseStats.FetchStat(Stat.Health);
 		}
 
 		public float FetchMaxhealth()
@@ -53,8 +58,8 @@ namespace RPGCourse.Resources
 
 			print(gameObject.name + " took damage: " + damage);
 
-			healthPoints = Mathf.Max(healthPoints - damage, 0); // takes highest value, in this case either health - damage, or 0
-			if (healthPoints == 0)
+			healthPoints.value = Mathf.Max(healthPoints.value - damage, 0); // takes highest value, in this case either health - damage, or 0
+			if (healthPoints.value == 0)
 			{
 				Die();
 				RewardExperience(instigator);
@@ -80,7 +85,7 @@ namespace RPGCourse.Resources
 		private void RestoreHealth()
 		{
 			float regenHealthPoints = statHealth * (healthRegenPercentage / 100);
-			healthPoints = Mathf.Max(healthPoints, regenHealthPoints);
+			healthPoints.value = Mathf.Max(healthPoints.value, regenHealthPoints);
 		}
 		
 		public bool IsAlive()
@@ -90,7 +95,7 @@ namespace RPGCourse.Resources
 
 		public float FetchHealth()
 		{
-			return healthPoints;
+			return healthPoints.value;
 		}
 
 		public object CaptureState()
@@ -100,12 +105,12 @@ namespace RPGCourse.Resources
 
 		public void RestoreState(object state)
 		{
-			healthPoints = (float)state;
-			if(healthPoints == 0)
+			healthPoints.value = (float)state;
+			if(healthPoints.value == 0)
 			{
 				Die();
 			}
-			else if(healthPoints > 0 && !isAlive)
+			else if(healthPoints.value > 0 && !isAlive)
 			{
 				GetComponent<Animator>().SetTrigger("revive");
 				isAlive = true;
