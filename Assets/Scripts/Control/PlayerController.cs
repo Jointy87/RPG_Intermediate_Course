@@ -4,6 +4,8 @@ using UnityEngine;
 using RPGCourse.Movement;
 using RPGCourse.Combat;
 using RPGCourse.Resources;
+using System;
+using UnityEngine.EventSystems;
 
 namespace RPGCourse.Control
 {
@@ -15,8 +17,6 @@ namespace RPGCourse.Control
 		//Cache
 		Health health;
 		Fighter fighter;
-
-		enum CursorType {None, Movement, Combat}
 
 		[System.Serializable]
 		struct CursorMapping
@@ -34,35 +34,65 @@ namespace RPGCourse.Control
 
 		void Update()
 		{
-			if (!health.IsAlive()) return;
+			if(InterfaceInteraction()) return;
+			
+			if(!health.IsAlive())
+			{
+				SetCursor(CursorType.None);
+				return;
+			} 
 
-			if (ControlCombat()) return;
-			else if (ControlMovement()) return;
+			if(ComponentInteraction()) return;
+			if(MovementInteraction()) return;
 
 			SetCursor(CursorType.None);
 		}
 
-		private bool ControlCombat()
+		private bool InterfaceInteraction()
 		{
-			RaycastHit[] hits = Physics.RaycastAll(GetMouseRay());
+			if(EventSystem.current.IsPointerOverGameObject()) 
+			{
+				SetCursor(CursorType.UI);
+				return true;
+			}
+			else return false;
+		}
+
+		private bool ComponentInteraction()
+		{
+			RaycastHit[] hits = SortedRaycasts();
 			foreach (RaycastHit hit in hits)
 			{
-				CombatTarget target = hit.transform.GetComponent<CombatTarget>();
-				if(!target) continue;
-
-				if(!fighter.CanAttack(target.gameObject)) continue;
-
-				if (Input.GetMouseButtonDown(0))
+				IRaycastable[] raycastables =  hit.transform.GetComponents<IRaycastable>();
+				
+				foreach(IRaycastable raycastable in raycastables)
 				{
-					fighter.Attack(target.gameObject);
+					if(raycastable.HandleRaycast(this))
+					{
+						SetCursor(raycastable.GetCursorType());
+						return true;
+					}
 				}
-				SetCursor(CursorType.Combat);
-				return true;
 			}
 			return false;
 		}
 
-		private bool ControlMovement()
+		private RaycastHit[] SortedRaycasts()
+		{
+			RaycastHit[] hits = Physics.RaycastAll(GetMouseRay());
+
+			float[] distances = new float[hits.Length];
+
+			for (int hit = 0; hit < hits.Length; hit++)
+			{
+				distances[hit] = hits[hit].distance;
+			}
+
+			Array.Sort(distances, hits);
+			return hits;
+		}
+
+		private bool MovementInteraction()
 		{
 			RaycastHit hit;
 			bool hasHit = Physics.Raycast(GetMouseRay(), out hit);
