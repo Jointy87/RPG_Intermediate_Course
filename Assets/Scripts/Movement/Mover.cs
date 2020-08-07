@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using RPGCourse.Core;
 using RPGCourse.Saving;
-using RPGCourse.Resources;
+using RPGCourse.Attributes;
 
 namespace RPGCourse.Movement
 {

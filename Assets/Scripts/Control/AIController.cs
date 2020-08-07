@@ -5,7 +5,7 @@ using RPGCourse.Combat;
 using RPGCourse.Core;
 using RPGCourse.Movement;
 using RPGCourse.Saving;
-using RPGCourse.Resources;
+using RPGCourse.Attributes;
 using GameDevTV.Utils;
 
 namespace RPGCourse.Control

@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using GameDevTV.Utils;
-using RPGCourse.Resources;
 using UnityEngine;
 
 namespace RPGCourse.Stats

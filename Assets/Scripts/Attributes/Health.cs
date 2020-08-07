@@ -7,7 +7,7 @@ using RPGCourse.Core;
 using GameDevTV.Utils;
 using UnityEngine.Events;
 
-namespace RPGCourse.Resources
+namespace RPGCourse.Attributes
 {
 	public class Health : MonoBehaviour, ISaveable
 	{
@@ -17,7 +17,6 @@ namespace RPGCourse.Resources
 
 		[System.Serializable]
 		public class ChangeHealthEvent : UnityEvent<float, Color> {}
-
 
 		//Cache
 		BaseStats baseStats;
@@ -59,6 +58,8 @@ namespace RPGCourse.Resources
 			healthPoints.value = Mathf.Max(healthPoints.value - damage, 0); // takes highest value, in this case either health - damage, or 0
 
 			changeHP.Invoke(damage, Color.red);
+
+			float normalizedHealth = healthPoints.value / FetchMaxHealth();
 			
 			if (healthPoints.value == 0)
 			{

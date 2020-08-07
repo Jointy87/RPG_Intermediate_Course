@@ -4,7 +4,7 @@ using UnityEngine;
 using RPGCourse.Movement;
 using RPGCourse.Core;
 using RPGCourse.Saving;
-using RPGCourse.Resources;
+using RPGCourse.Attributes;
 using RPGCourse.Stats;
 using GameDevTV.Utils;
 

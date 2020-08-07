@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using RPGCourse.Resources;
 using UnityEngine;
 
 namespace RPGCourse.UI.DamageText

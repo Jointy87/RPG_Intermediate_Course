@@ -69,6 +69,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  scaleHealthBar:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &3099239734441441287
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -242,7 +245,7 @@ PrefabInstance:
     - target: {fileID: 2005600329680888233, guid: 6df35e63cbec33d43ba7943d0db80549,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.05
+      value: -0.48
       objectReference: {fileID: 0}
     - target: {fileID: 2005600329680888233, guid: 6df35e63cbec33d43ba7943d0db80549,
         type: 3}

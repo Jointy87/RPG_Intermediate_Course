@@ -2,7 +2,7 @@ using RPGCourse.Combat;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace RPGCourse.Resources
+namespace RPGCourse.Attributes
 {
 
 	public class HealthDisplay : MonoBehaviour
