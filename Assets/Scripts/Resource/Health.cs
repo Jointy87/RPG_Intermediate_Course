@@ -5,6 +5,7 @@ using RPGCourse.Saving;
 using RPGCourse.Stats;
 using RPGCourse.Core;
 using GameDevTV.Utils;
+using UnityEngine.Events;
 
 namespace RPGCourse.Resources
 {
@@ -12,6 +13,11 @@ namespace RPGCourse.Resources
 	{
 		//Config parameters
 		[SerializeField] float healthRegenPercentage = 75;
+		[SerializeField] ChangeHealthEvent changeHP;
+
+		[System.Serializable]
+		public class ChangeHealthEvent : UnityEvent<float, Color> {}
+
 
 		//Cache
 		BaseStats baseStats;
@@ -50,9 +56,10 @@ namespace RPGCourse.Resources
 		{
 			if (!isAlive) return;
 
-			print(gameObject.name + " took damage: " + damage);
-
 			healthPoints.value = Mathf.Max(healthPoints.value - damage, 0); // takes highest value, in this case either health - damage, or 0
+
+			changeHP.Invoke(damage, Color.red);
+			
 			if (healthPoints.value == 0)
 			{
 				Die();
@@ -79,7 +86,11 @@ namespace RPGCourse.Resources
 		private void RestoreHealth()
 		{
 			float regenHealthPoints = baseStats.FetchStat(Stat.Health) * (healthRegenPercentage / 100);
+			float previousHealth = healthPoints.value;
 			healthPoints.value = Mathf.Max(healthPoints.value, regenHealthPoints);
+			float healthRegained = healthPoints.value - previousHealth;
+
+			changeHP.Invoke(healthRegained, Color.green);
 		}
 		
 		public bool IsAlive()

@@ -144,7 +144,6 @@ namespace RPGCourse.Control
 			{
 				totalDistance = Vector3.Distance(path.corners[corner], path.corners[corner + 1]);
 			}
-			print(totalDistance);
 			return totalDistance;
 		}
 
