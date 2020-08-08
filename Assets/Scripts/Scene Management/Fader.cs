@@ -9,7 +9,8 @@ namespace RPGCourse.SceneManagement
 		[SerializeField] float transitionTime;
 
 		//Cache
-		CanvasGroup canvasGroup;
+		CanvasGroup canvasGroup = null;
+		Coroutine activeCoroutine = null; 	
 
 		void Awake() 
 		{
@@ -23,17 +24,27 @@ namespace RPGCourse.SceneManagement
 
 		public IEnumerator FadeOut()
 		{
-			while (canvasGroup.alpha < 1) 
-			{
-				canvasGroup.alpha += Time.deltaTime / transitionTime;
-				yield return null;
-			}
+			return Fade(1); //not yield return becuase it returns a IEnumerator
 		}
+
 		public IEnumerator FadeIn()
 		{
-			while (canvasGroup.alpha > 0)
+			return Fade(0);
+		}
+
+		public IEnumerator Fade(float target)
+		{
+			if(activeCoroutine != null) StopCoroutine(activeCoroutine);
+			activeCoroutine = StartCoroutine(FadeRoutine(target)); //Coroutines have returntype coroutine that you can use
+			yield return activeCoroutine;
+		}
+
+		private IEnumerator FadeRoutine(float target)
+		{
+			while (!Mathf.Approximately(canvasGroup.alpha, target))
 			{
-				canvasGroup.alpha -= Time.deltaTime / transitionTime;
+				//mathf.movetowards to get float to desired value using desired speed
+				canvasGroup.alpha = Mathf.MoveTowards(canvasGroup.alpha, target, Time.deltaTime / transitionTime);
 				yield return null;
 			}
 		}
