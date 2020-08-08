@@ -2,7 +2,8 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.AI;
- 
+using RPGCourse.Control;
+
 namespace RPGCourse.SceneManagement
 {
 	public class Portal : MonoBehaviour
@@ -22,6 +23,7 @@ namespace RPGCourse.SceneManagement
 			}
 		}
 
+		//For debugging race conditions, check yield returns. Is there something the player could do during that time that could trigger a race condition
 		private IEnumerator SceneTransition()
 		{
 			if (sceneIndex < 0)
@@ -35,13 +37,14 @@ namespace RPGCourse.SceneManagement
 			transform.parent = null;
 			DontDestroyOnLoad(gameObject);
 
-			
+			GameObject.FindWithTag("Player").GetComponent<PlayerController>().hasControl = false;
 			yield return fader.FadeOut();
 
 			SavingWrapper wrapper =  FindObjectOfType<SavingWrapper>();
 			wrapper.Save();
 
 			yield return SceneManager.LoadSceneAsync(sceneIndex); //Waits till after scene has l
+			GameObject.FindWithTag("Player").GetComponent<PlayerController>().hasControl = false; //Disable again because new version of player is loaded
 
 			wrapper.Load();
 
@@ -52,6 +55,7 @@ namespace RPGCourse.SceneManagement
 
 			yield return new WaitForSeconds(.5f);
 			yield return fader.FadeIn();
+			GameObject.FindWithTag("Player").GetComponent<PlayerController>().hasControl = true;
 
 			Destroy(gameObject);
 		}

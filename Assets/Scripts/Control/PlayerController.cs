@@ -34,8 +34,15 @@ namespace RPGCourse.Control
 			fighter = GetComponent<Fighter>();
 		}
 
+		private void Start() 
+		{
+			hasControl = true;
+		}
+
 		void Update()
 		{
+			if (!hasControl) return;
+
 			if(InterfaceInteraction()) return;
 			
 			if(!health.IsAlive())
@@ -43,7 +50,7 @@ namespace RPGCourse.Control
 				SetCursor(CursorType.None);
 				return;
 			} 
-
+			
 			if(ComponentInteraction()) return;
 			if(MovementInteraction()) return;
 
@@ -166,6 +173,8 @@ namespace RPGCourse.Control
 			}
 			return cursorMappings[0];
 		}
+
+		public bool hasControl{get; set;}
 	}
 
 }
