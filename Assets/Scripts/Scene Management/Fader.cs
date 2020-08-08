@@ -22,21 +22,22 @@ namespace RPGCourse.SceneManagement
 			canvasGroup.alpha = 1;
 		}
 
-		public IEnumerator FadeOut()
+		public Coroutine FadeOut()
 		{
-			return Fade(1); //not yield return becuase it returns a IEnumerator
+			return Fade(1); //not yield return becuase it returns another IEnumerator or Coroutine
 		}
 
-		public IEnumerator FadeIn()
+		public Coroutine FadeIn()
 		{
 			return Fade(0);
 		}
 
-		public IEnumerator Fade(float target)
+		public Coroutine Fade(float target) //returntype Coroutine allows the coroutine to run independently if we want.
+											//In this case we use return instead of yield return.
 		{
 			if(activeCoroutine != null) StopCoroutine(activeCoroutine);
 			activeCoroutine = StartCoroutine(FadeRoutine(target)); //Coroutines have returntype coroutine that you can use
-			yield return activeCoroutine;
+			return activeCoroutine;
 		}
 
 		private IEnumerator FadeRoutine(float target)

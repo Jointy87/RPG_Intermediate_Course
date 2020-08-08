@@ -54,7 +54,7 @@ namespace RPGCourse.SceneManagement
 			wrapper.Save(); //so player location isn't by previous portal, which right away makes you go through portal again
 
 			yield return new WaitForSeconds(.5f);
-			yield return fader.FadeIn();
+			fader.FadeIn(); 	//FadeIn is coroutine instead of IEnumerator, so runs independently without having to wait on it
 			GameObject.FindWithTag("Player").GetComponent<PlayerController>().hasControl = true;
 
 			Destroy(gameObject);
