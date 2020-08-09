@@ -14,6 +14,8 @@ namespace RPGCourse.Attributes
 		//Config parameters
 		[SerializeField] float healthRegenPercentage = 75;
 		[SerializeField] ChangeHealthEvent changeHP;
+		[SerializeField] UnityEvent playDamageAudio;
+		[SerializeField] UnityEvent playDeathAudio;
 
 		[System.Serializable]
 		public class ChangeHealthEvent : UnityEvent<float, Color> {}
@@ -58,6 +60,7 @@ namespace RPGCourse.Attributes
 			healthPoints.value = Mathf.Max(healthPoints.value - damage, 0); // takes highest value, in this case either health - damage, or 0
 
 			changeHP.Invoke(damage, Color.red);
+			playDamageAudio.Invoke();
 
 			float normalizedHealth = healthPoints.value / FetchMaxHealth();
 			
@@ -73,6 +76,7 @@ namespace RPGCourse.Attributes
 			if (!isAlive) return;
 
 			isAlive = false;
+			playDeathAudio.Invoke();
 			GetComponent<Animator>().SetTrigger("die");
 			GetComponent<ActionScheduler>().CancelCurrentAction();
 		}
