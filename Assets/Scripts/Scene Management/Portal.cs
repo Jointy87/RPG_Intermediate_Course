@@ -43,7 +43,7 @@ namespace RPGCourse.SceneManagement
 			SavingWrapper wrapper =  FindObjectOfType<SavingWrapper>();
 			wrapper.Save();
 
-			yield return SceneManager.LoadSceneAsync(sceneIndex); //Waits till after scene has l
+			yield return SceneManager.LoadSceneAsync(sceneIndex);
 			GameObject.FindWithTag("Player").GetComponent<PlayerController>().hasControl = false; //Disable again because new version of player is loaded
 
 			wrapper.Load();
