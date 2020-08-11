@@ -57,6 +57,12 @@ PrefabInstance:
       propertyPath: leftHandTransform
       value: 
       objectReference: {fileID: 2563520505371988763}
+    - target: {fileID: 2365088494699441930, guid: cda4ef695f71b2d48b09521641e552b1,
+        type: 3}
+      propertyPath: defaultWeaponConfig
+      value: 
+      objectReference: {fileID: 11400000, guid: de81ea0719541bb4688b333b59b277de,
+        type: 2}
     - target: {fileID: 3965723394234107856, guid: cda4ef695f71b2d48b09521641e552b1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -112,6 +118,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4306717525670004344, guid: cda4ef695f71b2d48b09521641e552b1,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 5259403504540999593, guid: cda4ef695f71b2d48b09521641e552b1,
         type: 3}
       propertyPath: scaleHealthBar.m_PersistentCalls.m_Calls.Array.size
@@ -165,7 +176,7 @@ PrefabInstance:
     - target: {fileID: 6339135661433580635, guid: cda4ef695f71b2d48b09521641e552b1,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5858086962912694968, guid: cda4ef695f71b2d48b09521641e552b1, type: 3}

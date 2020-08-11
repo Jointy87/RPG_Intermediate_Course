@@ -12,6 +12,7 @@ namespace RPGCourse.Movement
 	{
 		//Config paramters
 		[SerializeField] float maxSpeed = 6f;
+		[SerializeField] float maxPathDistance = 25f;
 		
 		//Cache
 		NavMeshAgent nma;
@@ -36,6 +37,30 @@ namespace RPGCourse.Movement
 			GetComponent<ActionScheduler>().StartAction(this);
 
 			MoveTo(destination, speedFraction);
+		}
+
+		public bool CanMoveTo(Vector3 destination)
+		{
+			NavMeshPath path = new NavMeshPath();
+			bool hasPath = NavMesh.CalculatePath(transform.position, destination, NavMesh.AllAreas, path);
+			if (!hasPath || path.status != NavMeshPathStatus.PathComplete) return false;
+
+			if (GetPathLength(path) > maxPathDistance) return false;
+
+			return true;
+		}
+
+		private float GetPathLength(NavMeshPath path)
+		{
+			float totalDistance = 0;
+
+			if (path.corners.Length < 2) return totalDistance;
+
+			for (int corner = 0; corner < path.corners.Length - 1; corner++)
+			{
+				totalDistance = Vector3.Distance(path.corners[corner], path.corners[corner + 1]);
+			}
+			return totalDistance;
 		}
 
 		public void MoveTo(Vector3 destination, float speedFraction)

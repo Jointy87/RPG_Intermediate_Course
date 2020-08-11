@@ -13,12 +13,15 @@ namespace RPGCourse.Attributes
 	{
 		//Config parameters
 		[SerializeField] float healthRegenPercentage = 75;
-		[SerializeField] ChangeHealthEvent changeHP;
-		[SerializeField] UnityEvent playDamageAudio;
-		[SerializeField] UnityEvent playDeathAudio;
+		[SerializeField] TakeDamageEvent onDamageTaken;
+		[SerializeField] RestoreHealthEvent onHealthRestored;
+		[SerializeField] UnityEvent onDeath;
 
 		[System.Serializable]
-		public class ChangeHealthEvent : UnityEvent<float, Color> {}
+		public class TakeDamageEvent : UnityEvent<float, Color> {}
+
+		[System.Serializable]
+		public class RestoreHealthEvent : UnityEvent<float, Color> { }
 
 		//Cache
 		BaseStats baseStats;
@@ -35,12 +38,12 @@ namespace RPGCourse.Attributes
 
 		private void OnEnable() 
 		{
-			if (baseStats != null) baseStats.onLevelUp += RestoreHealth;
+			if (baseStats != null) baseStats.onLevelUp += RestoreHealthAtLevelUp;
 		}
 
 		private void OnDisable() 
 		{
-			if (baseStats != null) baseStats.onLevelUp -= RestoreHealth;
+			if (baseStats != null) baseStats.onLevelUp -= RestoreHealthAtLevelUp;
 		}
 
 		private void Start() 
@@ -59,8 +62,7 @@ namespace RPGCourse.Attributes
 
 			healthPoints.value = Mathf.Max(healthPoints.value - damage, 0); // takes highest value, in this case either health - damage, or 0
 
-			changeHP.Invoke(damage, Color.red);
-			playDamageAudio.Invoke();
+			onDamageTaken.Invoke(damage, Color.red);
 
 			float normalizedHealth = healthPoints.value / FetchMaxHealth();
 			
@@ -76,7 +78,7 @@ namespace RPGCourse.Attributes
 			if (!isAlive) return;
 
 			isAlive = false;
-			playDeathAudio.Invoke();
+			onDeath.Invoke();
 			GetComponent<Animator>().SetTrigger("die");
 			GetComponent<ActionScheduler>().CancelCurrentAction();
 		}
@@ -88,14 +90,19 @@ namespace RPGCourse.Attributes
 			instigator.GetComponent<Experience>().AddExperience(expToReward);
 		}
 
-		private void RestoreHealth()
+		private void RestoreHealthAtLevelUp()
 		{
 			float regenHealthPoints = baseStats.FetchStat(Stat.Health) * (healthRegenPercentage / 100);
 			float previousHealth = healthPoints.value;
 			healthPoints.value = Mathf.Max(healthPoints.value, regenHealthPoints);
 			float healthRegained = healthPoints.value - previousHealth;
 
-			changeHP.Invoke(healthRegained, Color.green);
+			onHealthRestored.Invoke(healthRegained, Color.green);
+		}
+
+		public void RestoreHealth(float amount)
+		{
+			healthPoints.value = Mathf.Min(baseStats.FetchStat(Stat.Health), healthPoints.value + amount);
 		}
 		
 		public bool IsAlive()

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using RPGCourse.Attributes;
-
+using UnityEngine.Events;
 
 namespace RPGCourse.Combat
 {
@@ -15,6 +15,7 @@ namespace RPGCourse.Combat
 		[SerializeField] float maxLifeTime = 10;
 		[SerializeField] GameObject[] destroyOnHit = null;
 		[SerializeField] float lifeAfterImpact = 1;
+		[SerializeField] UnityEvent playHitAudio;
 
 		//Cache
 		Health target = null;
@@ -58,6 +59,7 @@ namespace RPGCourse.Combat
 			if (other.GetComponent<Health>() != target || !target.IsAlive()) return;
 			speed = 0;
 			target.TakeDamage(instigator, damage);
+			playHitAudio.Invoke();
 
 			if(hitVFX != null)
 			{

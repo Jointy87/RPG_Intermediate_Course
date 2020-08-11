@@ -57,7 +57,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthRegenPercentage: 75
-  changeHP:
+  onDamageTaken:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8686188496704849516}
@@ -71,9 +71,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  playDamageAudio:
-    m_PersistentCalls:
-      m_Calls:
       - m_Target: {fileID: 225266165148219762}
         m_MethodName: PlayClip
         m_Mode: 1
@@ -85,7 +82,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  playDeathAudio:
+  onHealthRestored:
+    m_PersistentCalls:
+      m_Calls: []
+  onDeath:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3653701490953704693}
@@ -126,7 +126,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rightHandTransform: {fileID: 0}
   leftHandTransform: {fileID: 0}
-  defaultWeapon: {fileID: 11400000, guid: de81ea0719541bb4688b333b59b277de, type: 2}
+  defaultWeaponConfig: {fileID: 0}
 --- !u!114 &2706950228725019495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -314,7 +314,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -460,7 +460,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
