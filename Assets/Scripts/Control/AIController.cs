@@ -7,6 +7,8 @@ using RPGCourse.Movement;
 using RPGCourse.Saving;
 using RPGCourse.Attributes;
 using GameDevTV.Utils;
+using UnityEngine.Events;
+using System;
 
 namespace RPGCourse.Control
 {
@@ -25,6 +27,8 @@ namespace RPGCourse.Control
 		[SerializeField] float waypointDwellTime = 1f;
 		[Range(0,1)][Tooltip("Max speed divided by this amount while patrolling")]
 		[SerializeField] float patrolSpeedFraction = .3f;
+		[SerializeField] float maxAggroTime = 5f;
+		[SerializeField] float mobAggroRadius = 5f;
 
 		//Cache
 		GameObject player;
@@ -35,9 +39,11 @@ namespace RPGCourse.Control
 		//States
 		LazyValue<Vector3> guardPosition;
 		float timeSinceLastSawPlayer = Mathf.Infinity;
-		float timeDwelledAtWaypoint = Mathf.Infinity;	
+		float timeDwelledAtWaypoint = Mathf.Infinity;
+		float timeSinceAggro = Mathf.Infinity;
 		int waypointIndex = 0;
 		Vector3 nextPosition;
+
 
 		void Awake() 
 		{
@@ -70,13 +76,18 @@ namespace RPGCourse.Control
 		{
 			timeSinceLastSawPlayer += Time.deltaTime;
 			timeDwelledAtWaypoint += Time.deltaTime;
+			timeSinceAggro += Time.deltaTime;
+		}
+
+		public void Aggrevate() //Called from event
+		{
+			timeSinceAggro = 0;
 		}
 
 		private void ChaseAndAttackPlayer()
 		{
-			if (InChaseDistance() && fighter.CanAttack(player))
+			if (IsAggrevated() && fighter.CanAttack(player))
 			{
-				timeSinceLastSawPlayer = 0;
 				AttackBehaviour();
 			}
 			else if (timeSinceLastSawPlayer <= suspicionTime)
@@ -90,7 +101,23 @@ namespace RPGCourse.Control
 		}
 		private void AttackBehaviour()
 		{
+			timeSinceLastSawPlayer = 0;
 			fighter.Attack(player);
+
+			AggrevateNearbyEnemies();
+		}
+
+		private void AggrevateNearbyEnemies()
+		{
+			RaycastHit[] hits = 
+				Physics.SphereCastAll(transform.position, mobAggroRadius, Vector3.up, 0);
+
+			foreach (RaycastHit hit in hits)
+			{
+				AIController enemyAI = hit.collider.GetComponent<AIController>();
+				if(!enemyAI) continue;
+				enemyAI.Aggrevate();
+			}
 		}
 
 		private void SuspicionBehaviour()
@@ -135,10 +162,10 @@ namespace RPGCourse.Control
 			return patrolPath.GetWaypointPosition(waypointIndex);
 		}
 
-		private bool InChaseDistance()
+		private bool IsAggrevated()
 		{
 			float distanceToPlayer = Vector3.Distance(player.transform.position, transform.position);
-			return distanceToPlayer <= chaseDistance;
+			return distanceToPlayer <= chaseDistance || timeSinceAggro <= maxAggroTime;
 		}
 
 		//Called by Unity
