@@ -14,6 +14,7 @@ namespace RPGCourse.Control
 	{	
 		//Config parameters
 		[SerializeField] CursorMapping[] cursorMappings = null;
+		[SerializeField] float raycastRadius = .5f;
 
 		//Cache
 		Health health;
@@ -87,7 +88,7 @@ namespace RPGCourse.Control
 
 		private RaycastHit[] SortedRaycasts()
 		{
-			RaycastHit[] hits = Physics.RaycastAll(GetMouseRay());
+			RaycastHit[] hits = Physics.SphereCastAll(GetMouseRay(), raycastRadius);
 
 			float[] distances = new float[hits.Length];
 
