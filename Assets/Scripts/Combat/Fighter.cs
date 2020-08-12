@@ -43,7 +43,7 @@ namespace RPGCourse.Combat
 		private void Update()
 		{
 			timeSinceLastAttack += Time.deltaTime;
-			GetInRange();
+			GetInRange(target.transform);
 		}
 
 		private Weapon SetDefaultWeapon()
@@ -62,14 +62,12 @@ namespace RPGCourse.Combat
 			return weapon.Spawn(rightHandTransform, leftHandTransform, animator);
 		}
 
-		private void GetInRange()
+		private void GetInRange(Transform currentTarget)
 		{
 			if (!target || !target.IsAlive()) return;
+			bool inRange = InRange(currentTarget);
 
-			bool isInRange = Vector3.Distance
-				(transform.position, target.transform.position) < currentWeaponConfig.FetchRange();
-
-			if (!isInRange)
+			if (!inRange)
 			{
 				mover.MoveTo(target.transform.position, 1f);
 			}
@@ -78,6 +76,12 @@ namespace RPGCourse.Combat
 				mover.Cancel();
 				AttackBehaviour();
 			}
+		}
+
+		private bool InRange(Transform currentTarget)
+		{
+			return Vector3.Distance
+							(transform.position, currentTarget.position) < currentWeaponConfig.FetchRange();
 		}
 
 		private void AttackBehaviour()
@@ -143,7 +147,8 @@ namespace RPGCourse.Combat
 		{
 			if(!combatTarget) return false;
 
-			if (!GetComponent<Mover>().CanMoveTo(combatTarget.transform.position)) return false;
+			if (!GetComponent<Mover>().CanMoveTo(combatTarget.transform.position) && 
+				!InRange(combatTarget.transform)) return false;
 
 			Health targetToTest = combatTarget.GetComponent<Health>();
 			return targetToTest != null && targetToTest.IsAlive();
